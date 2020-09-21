@@ -1,10 +1,12 @@
 package com.wandson.food.infrastructure.repository;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,8 +37,13 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
 
 	@Override
 	@Transactional
-	public void remover(Cozinha cozinha) {
-		cozinha = buscar(cozinha.getId());
+	public void remover(Long id) {
+		Cozinha cozinha = buscar(id);
+
+		if (Objects.isNull(cozinha)) {
+			throw new EmptyResultDataAccessException(1);
+		}
+
 		manager.remove(cozinha);
 	}
 
