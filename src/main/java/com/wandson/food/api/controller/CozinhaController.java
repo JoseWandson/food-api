@@ -21,18 +21,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wandson.food.api.model.CozinhasXmlWrapper;
 import com.wandson.food.domain.model.Cozinha;
-import com.wandson.food.domain.repository.CozinhaRepository;
+import com.wandson.food.domain.service.CozinhaService;
 
 @RestController
 @RequestMapping("/cozinhas")
 public class CozinhaController {
 
 	@Autowired
-	private CozinhaRepository cozinhaRepository;
+	private CozinhaService cozinhaService;
 
 	@GetMapping
 	public List<Cozinha> listar() {
-		return cozinhaRepository.listar();
+		return cozinhaService.listar();
 	}
 
 	@GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
@@ -42,7 +42,7 @@ public class CozinhaController {
 
 	@GetMapping("/{cozinhaId}")
 	public ResponseEntity<Cozinha> buscar(@PathVariable Long cozinhaId) {
-		Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
+		Cozinha cozinha = cozinhaService.buscar(cozinhaId);
 		if (Objects.nonNull(cozinha)) {
 			return ResponseEntity.ok(cozinha);
 		}
@@ -52,17 +52,17 @@ public class CozinhaController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Cozinha adicionar(@RequestBody Cozinha cozinha) {
-		return cozinhaRepository.salvar(cozinha);
+		return cozinhaService.salvar(cozinha);
 	}
 
 	@PutMapping("/{cozinhaId}")
 	public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha) {
-		Cozinha cozinhaAtual = cozinhaRepository.buscar(cozinhaId);
+		Cozinha cozinhaAtual = cozinhaService.buscar(cozinhaId);
 
 		if (Objects.nonNull(cozinhaAtual)) {
 			BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
 
-			cozinhaAtual = cozinhaRepository.salvar(cozinhaAtual);
+			cozinhaAtual = cozinhaService.salvar(cozinhaAtual);
 			return ResponseEntity.ok(cozinhaAtual);
 		}
 		return ResponseEntity.notFound().build();
@@ -71,9 +71,9 @@ public class CozinhaController {
 	@DeleteMapping("/{cozinhaId}")
 	public ResponseEntity<Cozinha> remover(@PathVariable Long cozinhaId) {
 		try {
-			Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
+			Cozinha cozinha = cozinhaService.buscar(cozinhaId);
 			if (Objects.nonNull(cozinha)) {
-				cozinhaRepository.remover(cozinha);
+				cozinhaService.remover(cozinha);
 
 				return ResponseEntity.noContent().build();
 			}
