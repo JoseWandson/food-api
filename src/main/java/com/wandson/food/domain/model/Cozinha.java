@@ -8,13 +8,11 @@ import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
+@Data
 @Entity
-@Getter
-@Setter
 @JsonRootName("cozinha")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Cozinha {
