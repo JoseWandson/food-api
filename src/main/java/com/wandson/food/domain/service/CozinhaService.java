@@ -1,6 +1,7 @@
 package com.wandson.food.domain.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -19,20 +20,20 @@ public class CozinhaService {
 	private CozinhaRepository cozinhaRepository;
 
 	public Cozinha salvar(Cozinha cozinha) {
-		return cozinhaRepository.salvar(cozinha);
+		return cozinhaRepository.save(cozinha);
 	}
 
 	public List<Cozinha> listar() {
-		return cozinhaRepository.listar();
+		return cozinhaRepository.findAll();
 	}
 
-	public Cozinha buscar(Long cozinhaId) {
-		return cozinhaRepository.buscar(cozinhaId);
+	public Optional<Cozinha> buscar(Long cozinhaId) {
+		return cozinhaRepository.findById(cozinhaId);
 	}
 
 	public void excluir(Long cozinhaId) {
 		try {
-			cozinhaRepository.remover(cozinhaId);
+			cozinhaRepository.deleteById(cozinhaId);
 		} catch (EmptyResultDataAccessException e) {
 			throw new EntidadeNaoEncontradaException(
 					String.format("Não existe um cadastro de cozinha com código %d", cozinhaId));
