@@ -1,7 +1,7 @@
 package com.wandson.food.api.controller;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +36,9 @@ public class EstadoController {
 
 	@GetMapping("/{estadoId}")
 	public ResponseEntity<Estado> buscar(@PathVariable Long estadoId) {
-		Estado estado = estadoService.buscar(estadoId);
-		if (Objects.nonNull(estado)) {
-			return ResponseEntity.ok(estado);
+		Optional<Estado> estado = estadoService.buscar(estadoId);
+		if (estado.isPresent()) {
+			return ResponseEntity.ok(estado.get());
 		}
 		return ResponseEntity.notFound().build();
 	}
@@ -51,13 +51,13 @@ public class EstadoController {
 
 	@PutMapping("/{estadoId}")
 	public ResponseEntity<Estado> atualizar(@PathVariable Long estadoId, @RequestBody Estado estado) {
-		Estado estadoAtual = estadoService.buscar(estadoId);
+		Optional<Estado> estadoAtual = estadoService.buscar(estadoId);
 
-		if (Objects.nonNull(estadoAtual)) {
-			BeanUtils.copyProperties(estado, estadoAtual, "id");
+		if (estadoAtual.isPresent()) {
+			BeanUtils.copyProperties(estado, estadoAtual.get(), "id");
 
-			estadoAtual = estadoService.salvar(estadoAtual);
-			return ResponseEntity.ok(estadoAtual);
+			Estado estadoSalvo = estadoService.salvar(estadoAtual.get());
+			return ResponseEntity.ok(estadoSalvo);
 		}
 		return ResponseEntity.notFound().build();
 	}
