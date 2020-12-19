@@ -25,8 +25,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Entity
 @Data
+@Entity
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Restaurante {
 
