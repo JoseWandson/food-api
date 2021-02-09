@@ -59,6 +59,7 @@ public class Restaurante {
 	@Column(nullable = false, columnDefinition = "datetime")
 	private LocalDateTime dataAtualizacao;
 
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "restaurante_forma_pagamento", inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
 	private List<FormaPagamento> formasPagamento;

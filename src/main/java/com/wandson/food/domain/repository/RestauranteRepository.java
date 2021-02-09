@@ -21,7 +21,7 @@ public interface RestauranteRepository extends CustomJpaRepository<Restaurante, 
 
 	List<Restaurante> findTop2ByNomeContaining(String nome);
 
-	@Query("from Restaurante r join r.cozinha left join fetch r.formasPagamento")
+	@Query("from Restaurante r join r.cozinha")
 	List<Restaurante> findAll();
 
 	Optional<Restaurante> findFirstRestauranteByNomeContaining(String nome);
