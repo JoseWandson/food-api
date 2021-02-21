@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.wandson.food.domain.exception.EntidadeNaoEncontradaException;
 import com.wandson.food.domain.model.Cozinha;
 import com.wandson.food.domain.model.Restaurante;
 import com.wandson.food.domain.repository.RestauranteRepository;
@@ -30,8 +29,7 @@ public class RestauranteService {
 
 	public Restaurante salvar(Restaurante restaurante) {
 		Long cozinhaId = restaurante.getCozinha().getId();
-		Cozinha cozinha = cozinhaService.buscar(cozinhaId).orElseThrow(() -> new EntidadeNaoEncontradaException(
-				String.format("Não existe cadastro de cozinha com código %d", cozinhaId)));
+		Cozinha cozinha = cozinhaService.buscarOuFalhar(cozinhaId);
 
 		restaurante.setCozinha(cozinha);
 		return restauranteRepository.save(restaurante);
