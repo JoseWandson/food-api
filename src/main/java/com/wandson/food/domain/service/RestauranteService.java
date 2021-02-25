@@ -1,17 +1,19 @@
 package com.wandson.food.domain.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wandson.food.domain.exception.EntidadeNaoEncontradaException;
 import com.wandson.food.domain.model.Cozinha;
 import com.wandson.food.domain.model.Restaurante;
 import com.wandson.food.domain.repository.RestauranteRepository;
 
 @Service
 public class RestauranteService {
+
+	private static final String MSG_RESTAURANTE_NAO_ENCONTRADO = "Não existe um cadastro de restaurante com código %d";
 
 	@Autowired
 	private CozinhaService cozinhaService;
@@ -23,8 +25,9 @@ public class RestauranteService {
 		return restauranteRepository.findAll();
 	}
 
-	public Optional<Restaurante> buscar(Long restauranteId) {
-		return restauranteRepository.findById(restauranteId);
+	public Restaurante buscarOuFalhar(Long restauranteId) {
+		return restauranteRepository.findById(restauranteId).orElseThrow(
+				() -> new EntidadeNaoEncontradaException(String.format(MSG_RESTAURANTE_NAO_ENCONTRADO, restauranteId)));
 	}
 
 	public Restaurante salvar(Restaurante restaurante) {
