@@ -8,14 +8,13 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.wandson.food.domain.exception.EntidadeEmUsoException;
-import com.wandson.food.domain.exception.EntidadeNaoEncontradaException;
+import com.wandson.food.domain.exception.EstadoNaoEncontradoException;
 import com.wandson.food.domain.model.Estado;
 import com.wandson.food.domain.repository.EstadoRepository;
 
 @Service
 public class EstadoService {
 
-	private static final String MSG_ESTADO_NAO_ENTRADO = "Não existe um cadastro de estado com código %d";
 	private static final String MSG_ESTADO_EM_USO = "Estado de código %d não pode ser removido, pois está em uso";
 
 	@Autowired
@@ -30,15 +29,14 @@ public class EstadoService {
 	}
 
 	public Estado buscarOuFalhar(Long estadoId) {
-		return estadoRepository.findById(estadoId)
-				.orElseThrow(() -> new EntidadeNaoEncontradaException(String.format(MSG_ESTADO_NAO_ENTRADO, estadoId)));
+		return estadoRepository.findById(estadoId).orElseThrow(() -> new EstadoNaoEncontradoException(estadoId));
 	}
 
 	public void excluir(Long estadoId) {
 		try {
 			estadoRepository.deleteById(estadoId);
 		} catch (EmptyResultDataAccessException e) {
-			throw new EntidadeNaoEncontradaException(String.format(MSG_ESTADO_NAO_ENTRADO, estadoId));
+			throw new EstadoNaoEncontradoException(estadoId);
 		} catch (DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(String.format(MSG_ESTADO_EM_USO, estadoId));
 		}

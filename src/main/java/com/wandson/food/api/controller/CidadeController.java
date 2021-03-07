@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wandson.food.domain.exception.EntidadeNaoEncontradaException;
+import com.wandson.food.domain.exception.EstadoNaoEncontradoException;
 import com.wandson.food.domain.exception.NegocioException;
 import com.wandson.food.domain.model.Cidade;
 import com.wandson.food.domain.service.CidadeService;
@@ -42,21 +42,19 @@ public class CidadeController {
 	public Cidade adicionar(@RequestBody Cidade cidade) {
 		try {
 			return cidadeService.salvar(cidade);
-		} catch (EntidadeNaoEncontradaException e) {
-			throw new NegocioException(e.getMessage());
+		} catch (EstadoNaoEncontradoException e) {
+			throw new NegocioException(e.getMessage(), e);
 		}
 	}
 
 	@PutMapping("/{cidadeId}")
 	public Cidade atualizar(@PathVariable Long cidadeId, @RequestBody Cidade cidade) {
-		Cidade cidadeAtual = cidadeService.buscarOuFalhar(cidadeId);
-
-		BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-
 		try {
+			Cidade cidadeAtual = cidadeService.buscarOuFalhar(cidadeId);
+			BeanUtils.copyProperties(cidade, cidadeAtual, "id");
 			return cidadeService.salvar(cidadeAtual);
-		} catch (EntidadeNaoEncontradaException e) {
-			throw new NegocioException(e.getMessage());
+		} catch (EstadoNaoEncontradoException e) {
+			throw new NegocioException(e.getMessage(), e);
 		}
 	}
 
