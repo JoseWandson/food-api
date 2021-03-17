@@ -8,6 +8,7 @@ import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.wandson.food.domain.exception.EntidadeEmUsoException;
 import com.wandson.food.domain.exception.EntidadeNaoEncontradaException;
 import com.wandson.food.domain.exception.NegocioException;
 
@@ -18,6 +19,12 @@ public class ApiExceptionHandler {
 	public ResponseEntity<Problema> tratarEntidadeNaoEncontradaException(EntidadeNaoEncontradaException e) {
 		Problema problema = Problema.builder().dataHora(LocalDateTime.now()).mensagem(e.getMessage()).build();
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problema);
+	}
+
+	@ExceptionHandler(EntidadeEmUsoException.class)
+	public ResponseEntity<Problema> tratarEntidadeEmUsoException(EntidadeEmUsoException e) {
+		Problema problema = Problema.builder().dataHora(LocalDateTime.now()).mensagem(e.getMessage()).build();
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(problema);
 	}
 
 	@ExceptionHandler(NegocioException.class)
