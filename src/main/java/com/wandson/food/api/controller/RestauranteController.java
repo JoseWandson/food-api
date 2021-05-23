@@ -1,12 +1,16 @@
 package com.wandson.food.api.controller;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wandson.food.domain.exception.CozinhaNaoEncontradaException;
 import com.wandson.food.domain.exception.NegocioException;
@@ -53,7 +58,7 @@ public class RestauranteController {
 
 	@PutMapping("/{restauranteId}")
 	public Restaurante atualizar(@PathVariable Long restauranteId, @RequestBody Restaurante restaurante) {
-		Restaurante restauranteAtual = restauranteService.buscarOuFalhar(restauranteId);
+		var restauranteAtual = restauranteService.buscarOuFalhar(restauranteId);
 
 		BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro",
 				"produtos");
@@ -66,29 +71,39 @@ public class RestauranteController {
 	}
 
 	@PatchMapping("/{restauranteId}")
-	public Restaurante atualizarParcial(@PathVariable Long restauranteId, @RequestBody Map<String, Object> campos) {
-		Restaurante restauranteAtual = restauranteService.buscarOuFalhar(restauranteId);
+	public Restaurante atualizarParcial(@PathVariable Long restauranteId, @RequestBody Map<String, Object> campos,
+			HttpServletRequest request) {
+		var restauranteAtual = restauranteService.buscarOuFalhar(restauranteId);
 
-		merge(campos, restauranteAtual);
+		merge(campos, restauranteAtual, request);
 
 		return atualizar(restauranteId, restauranteAtual);
 	}
 
-	private void merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino) {
-		ObjectMapper objectMapper = new ObjectMapper();
-		Restaurante restauranteOrigem = objectMapper.convertValue(dadosOrigem, Restaurante.class);
+	private void merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino, HttpServletRequest request) {
+		var serverHttpRequest = new ServletServerHttpRequest(request);
 
-		dadosOrigem.forEach((nomePropriedade, valorPropriedade) -> {
-			char c = Character.toUpperCase(nomePropriedade.charAt(0));
-			String nomeMetodo = "get" + c + nomePropriedade.substring(1);
-			Method method = ReflectionUtils.findMethod(Restaurante.class, nomeMetodo);
+		try {
+			var objectMapper = new ObjectMapper();
+			objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
 
-			Object novoValor = ReflectionUtils.invokeMethod(method, restauranteOrigem);
+			var restauranteOrigem = objectMapper.convertValue(dadosOrigem, Restaurante.class);
 
-			nomeMetodo = "s" + nomeMetodo.substring(1);
-			method = ReflectionUtils.findMethod(Restaurante.class, nomeMetodo, novoValor.getClass());
-			ReflectionUtils.invokeMethod(method, restauranteDestino, novoValor);
-		});
+			dadosOrigem.forEach((nomePropriedade, valorPropriedade) -> {
+				var c = Character.toUpperCase(nomePropriedade.charAt(0));
+				String nomeMetodo = "get" + c + nomePropriedade.substring(1);
+				var method = ReflectionUtils.findMethod(Restaurante.class, nomeMetodo);
+
+				Object novoValor = ReflectionUtils.invokeMethod(method, restauranteOrigem);
+
+				nomeMetodo = "s" + nomeMetodo.substring(1);
+				method = ReflectionUtils.findMethod(Restaurante.class, nomeMetodo, novoValor.getClass());
+				ReflectionUtils.invokeMethod(method, restauranteDestino, novoValor);
+			});
+		} catch (IllegalArgumentException e) {
+			Throwable rootCause = ExceptionUtils.getRootCause(e);
+			throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serverHttpRequest);
+		}
 	}
 
 }
