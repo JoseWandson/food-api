@@ -25,7 +25,10 @@ import com.wandson.food.domain.exception.EntidadeEmUsoException;
 import com.wandson.food.domain.exception.EntidadeNaoEncontradaException;
 import com.wandson.food.domain.exception.NegocioException;
 
+import lombok.extern.slf4j.Slf4j;
+
 @ControllerAdvice
+@Slf4j
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(EntidadeNaoEncontradaException.class)
@@ -53,6 +56,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		var problemType = ProblemType.ERRO_NEGOCIO;
 		String detail = ex.getMessage();
 		var problem = createProblemBuilder(status, problemType, detail).build();
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+	}
+
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<Object> handleUncaught(Exception ex, WebRequest request) {
+		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+		var problemType = ProblemType.ERRO_DE_SISTEMA;
+		var detail = "Ocorreu um erro interno inesperado no sistema. Tente novamente e se o problema persistir, entre em contato com o administrador do sistema.";
+
+		log.error(ex.getMessage(), ex);
+
+		var problem = createProblemBuilder(status, problemType, detail).build();
+
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
 
