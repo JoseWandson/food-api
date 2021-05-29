@@ -70,7 +70,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 		log.error(ex.getMessage(), ex);
 
-		var problem = createProblemBuilder(status, problemType, MSG_ERRO_GENERICA_USUARIO_FINAL).build();
+		var problem = createProblemBuilder(status, problemType, MSG_ERRO_GENERICA_USUARIO_FINAL)
+				.userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL).build();
 
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
@@ -80,10 +81,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			HttpStatus status, WebRequest request) {
 		if (Objects.isNull(body)) {
 			body = Problem.builder().title(status.getReasonPhrase()).status(status.value())
-					.userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL).build();
+					.userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL).timestamp(LocalDateTime.now()).build();
 		} else if (body instanceof String) {
 			body = Problem.builder().title((String) body).status(status.value())
-					.userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL).build();
+					.userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL).timestamp(LocalDateTime.now()).build();
 		}
 		return super.handleExceptionInternal(ex, body, headers, status, request);
 	}
