@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
+import com.wandson.food.api.exceptionhandler.Problem.Field;
 import com.wandson.food.domain.exception.EntidadeEmUsoException;
 import com.wandson.food.domain.exception.EntidadeNaoEncontradaException;
 import com.wandson.food.domain.exception.NegocioException;
@@ -123,6 +125,20 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		var problemType = ProblemType.RECURSO_NAO_ENCONTRADO;
 		var detail = String.format("O recurso %s, que você tentou acessar, é inexistente.", ex.getRequestURL());
 		var problem = createProblemBuilder(status, problemType, detail).userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+				.build();
+		return handleExceptionInternal(ex, problem, headers, status, request);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		var problemType = ProblemType.DADOS_INVALIDOS;
+		var detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
+		var bindingResult = ex.getBindingResult();
+		List<Field> problemFields = bindingResult.getFieldErrors().stream().map(fieldError -> Field.builder()
+				.name(fieldError.getField()).userMessage(fieldError.getDefaultMessage()).build())
+				.collect(Collectors.toList());
+		var problem = createProblemBuilder(status, problemType, detail).userMessage(detail).fields(problemFields)
 				.build();
 		return handleExceptionInternal(ex, problem, headers, status, request);
 	}
