@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.wandson.food.domain.exception.CidadeNaoEncontradaException;
 import com.wandson.food.domain.exception.EntidadeEmUsoException;
 import com.wandson.food.domain.model.Cidade;
-import com.wandson.food.domain.model.Estado;
 import com.wandson.food.domain.repository.CidadeRepository;
 
 @Service
@@ -26,7 +25,7 @@ public class CidadeService {
 
 	public Cidade salvar(Cidade cidade) {
 		Long estadoId = cidade.getEstado().getId();
-		Estado estado = estadoService.buscarOuFalhar(estadoId);
+		var estado = estadoService.buscarOuFalhar(estadoId);
 		cidade.setEstado(estado);
 		return cidadeRepository.save(cidade);
 	}

@@ -25,6 +25,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.wandson.food.Groups;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,18 +40,18 @@ public class Restaurante {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotBlank
 	@Column(nullable = false)
+	@NotBlank(groups = Groups.CadastroRestaurante.class)
 	private String nome;
 
-	@PositiveOrZero
 	@Column(nullable = false)
+	@PositiveOrZero(groups = Groups.CadastroRestaurante.class)
 	private BigDecimal taxaFrete;
 
 	@Valid
-	@NotNull
 	@ManyToOne
 	@JoinColumn(nullable = false)
+	@NotNull(groups = Groups.CadastroRestaurante.class)
 	private Cozinha cozinha;
 
 	@Embedded

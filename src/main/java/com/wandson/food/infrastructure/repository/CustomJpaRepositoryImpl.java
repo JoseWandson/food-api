@@ -22,7 +22,7 @@ public class CustomJpaRepositoryImpl<T, I> extends SimpleJpaRepository<T, I> imp
 	public Optional<T> buscarPrimeiro() {
 		var jpql = "from " + getDomainClass().getName();
 
-		T entity = manager.createQuery(jpql, getDomainClass()).setMaxResults(1).getSingleResult();
+		var entity = manager.createQuery(jpql, getDomainClass()).setMaxResults(1).getSingleResult();
 
 		return Optional.ofNullable(entity);
 	}
