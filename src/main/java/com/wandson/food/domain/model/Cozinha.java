@@ -25,8 +25,8 @@ public class Cozinha {
 
 	@Id
 	@EqualsAndHashCode.Include
+	@NotNull(groups = Groups.CozinhaId.class)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@NotNull(groups = Groups.CadastroRestaurante.class)
 	private Long id;
 
 	@NotBlank
