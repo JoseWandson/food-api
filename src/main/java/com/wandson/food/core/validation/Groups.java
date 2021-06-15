@@ -1,4 +1,4 @@
-package com.wandson.food;
+package com.wandson.food.core.validation;
 
 public interface Groups {
 
