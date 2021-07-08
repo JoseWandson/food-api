@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wandson.food.core.validation.ValidacaoException;
 import com.wandson.food.domain.exception.CozinhaNaoEncontradaException;
 import com.wandson.food.domain.exception.NegocioException;
 import com.wandson.food.domain.model.Restaurante;
@@ -36,6 +39,9 @@ public class RestauranteController {
 
 	@Autowired
 	private RestauranteService restauranteService;
+
+	@Autowired
+	private SmartValidator validator;
 
 	@GetMapping
 	public List<Restaurante> listar() {
@@ -77,6 +83,7 @@ public class RestauranteController {
 		var restauranteAtual = restauranteService.buscarOuFalhar(restauranteId);
 
 		merge(campos, restauranteAtual, request);
+		validate(restauranteAtual, "restaurante");
 
 		return atualizar(restauranteId, restauranteAtual);
 	}
@@ -104,6 +111,15 @@ public class RestauranteController {
 		} catch (IllegalArgumentException e) {
 			Throwable rootCause = ExceptionUtils.getRootCause(e);
 			throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serverHttpRequest);
+		}
+	}
+
+	private void validate(Restaurante restaurante, String objectName) {
+		var bindingResult = new BeanPropertyBindingResult(restaurante, objectName);
+		validator.validate(restaurante, bindingResult);
+
+		if (bindingResult.hasErrors()) {
+			throw new ValidacaoException(bindingResult);
 		}
 	}
 
