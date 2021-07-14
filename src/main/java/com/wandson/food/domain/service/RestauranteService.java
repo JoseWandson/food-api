@@ -13,7 +13,7 @@ import com.wandson.food.domain.repository.RestauranteRepository;
 public class RestauranteService {
 
 	@Autowired
-	private CozinhaService cozinhaService;
+	private CadastroCozinhaService cozinhaService;
 
 	@Autowired
 	private RestauranteRepository restauranteRepository;

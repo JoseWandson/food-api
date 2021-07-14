@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wandson.food.domain.model.Cozinha;
-import com.wandson.food.domain.service.CozinhaService;
+import com.wandson.food.domain.service.CadastroCozinhaService;
 
 @RestController
 @RequestMapping("/cozinhas")
 public class CozinhaController {
 
 	@Autowired
-	private CozinhaService cozinhaService;
+	private CadastroCozinhaService cozinhaService;
 
 	@GetMapping
 	public List<Cozinha> listar() {

@@ -13,7 +13,7 @@ import com.wandson.food.domain.model.Cozinha;
 import com.wandson.food.domain.repository.CozinhaRepository;
 
 @Service
-public class CozinhaService {
+public class CadastroCozinhaService {
 
 	private static final String MSG_COZINHA_EM_USO = "Cozinha de código %d não pode ser removida, pois está em uso";
 
