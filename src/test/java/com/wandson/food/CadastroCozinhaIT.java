@@ -15,7 +15,7 @@ import com.wandson.food.domain.model.Cozinha;
 import com.wandson.food.domain.service.CadastroCozinhaService;
 
 @SpringBootTest
-class CadastroCozinhaIntegrationTests {
+class CadastroCozinhaIT {
 
 	@Autowired
 	private CadastroCozinhaService cadastroCozinha;
