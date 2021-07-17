@@ -1,7 +1,5 @@
 package com.wandson.food.domain.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -22,10 +20,6 @@ public class CadastroCozinhaService {
 
 	public Cozinha salvar(Cozinha cozinha) {
 		return cozinhaRepository.save(cozinha);
-	}
-
-	public List<Cozinha> listar() {
-		return cozinhaRepository.findAll();
 	}
 
 	public Cozinha buscarOuFalhar(Long cozinhaId) {

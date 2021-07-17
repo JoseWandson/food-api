@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wandson.food.domain.model.Cozinha;
+import com.wandson.food.domain.repository.CozinhaRepository;
 import com.wandson.food.domain.service.CadastroCozinhaService;
 
 @RestController
@@ -25,37 +26,40 @@ import com.wandson.food.domain.service.CadastroCozinhaService;
 public class CozinhaController {
 
 	@Autowired
-	private CadastroCozinhaService cozinhaService;
+	private CadastroCozinhaService cadastroCozinha;
+
+	@Autowired
+	private CozinhaRepository cozinhaRepository;
 
 	@GetMapping
 	public List<Cozinha> listar() {
-		return cozinhaService.listar();
+		return cozinhaRepository.findAll();
 	}
 
 	@GetMapping("/{cozinhaId}")
 	public Cozinha buscar(@PathVariable Long cozinhaId) {
-		return cozinhaService.buscarOuFalhar(cozinhaId);
+		return cadastroCozinha.buscarOuFalhar(cozinhaId);
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Cozinha adicionar(@RequestBody @Valid Cozinha cozinha) {
-		return cozinhaService.salvar(cozinha);
+		return cadastroCozinha.salvar(cozinha);
 	}
 
 	@PutMapping("/{cozinhaId}")
 	public Cozinha atualizar(@PathVariable Long cozinhaId, @RequestBody @Valid Cozinha cozinha) {
-		var cozinhaAtual = cozinhaService.buscarOuFalhar(cozinhaId);
+		var cozinhaAtual = cadastroCozinha.buscarOuFalhar(cozinhaId);
 
 		BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
 
-		return cozinhaService.salvar(cozinhaAtual);
+		return cadastroCozinha.salvar(cozinhaAtual);
 	}
 
 	@DeleteMapping("/{cozinhaId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long cozinhaId) {
-		cozinhaService.excluir(cozinhaId);
+		cadastroCozinha.excluir(cozinhaId);
 	}
 
 }
