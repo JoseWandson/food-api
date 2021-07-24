@@ -31,33 +31,37 @@ import com.wandson.food.core.validation.ValidacaoException;
 import com.wandson.food.domain.exception.CozinhaNaoEncontradaException;
 import com.wandson.food.domain.exception.NegocioException;
 import com.wandson.food.domain.model.Restaurante;
-import com.wandson.food.domain.service.RestauranteService;
+import com.wandson.food.domain.repository.RestauranteRepository;
+import com.wandson.food.domain.service.CadastroRestauranteService;
 
 @RestController
 @RequestMapping("/restaurantes")
 public class RestauranteController {
 
 	@Autowired
-	private RestauranteService restauranteService;
+	private CadastroRestauranteService cadastroRestaurante;
+
+	@Autowired
+	private RestauranteRepository restauranteRepository;
 
 	@Autowired
 	private SmartValidator validator;
 
 	@GetMapping
 	public List<Restaurante> listar() {
-		return restauranteService.listar();
+		return restauranteRepository.findAll();
 	}
 
 	@GetMapping("/{restauranteId}")
 	public Restaurante buscar(@PathVariable Long restauranteId) {
-		return restauranteService.buscarOuFalhar(restauranteId);
+		return cadastroRestaurante.buscarOuFalhar(restauranteId);
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Restaurante adicionar(@RequestBody @Valid Restaurante restaurante) {
 		try {
-			return restauranteService.salvar(restaurante);
+			return cadastroRestaurante.salvar(restaurante);
 		} catch (CozinhaNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());
 		}
@@ -65,13 +69,13 @@ public class RestauranteController {
 
 	@PutMapping("/{restauranteId}")
 	public Restaurante atualizar(@PathVariable Long restauranteId, @RequestBody @Valid Restaurante restaurante) {
-		var restauranteAtual = restauranteService.buscarOuFalhar(restauranteId);
+		var restauranteAtual = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
 		BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro",
 				"produtos");
 
 		try {
-			return restauranteService.salvar(restauranteAtual);
+			return cadastroRestaurante.salvar(restauranteAtual);
 		} catch (CozinhaNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());
 		}
@@ -80,7 +84,7 @@ public class RestauranteController {
 	@PatchMapping("/{restauranteId}")
 	public Restaurante atualizarParcial(@PathVariable Long restauranteId, @RequestBody Map<String, Object> campos,
 			HttpServletRequest request) {
-		var restauranteAtual = restauranteService.buscarOuFalhar(restauranteId);
+		var restauranteAtual = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
 		merge(campos, restauranteAtual, request);
 		validate(restauranteAtual, "restaurante");
