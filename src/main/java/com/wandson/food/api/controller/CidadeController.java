@@ -20,18 +20,22 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wandson.food.domain.exception.EstadoNaoEncontradoException;
 import com.wandson.food.domain.exception.NegocioException;
 import com.wandson.food.domain.model.Cidade;
-import com.wandson.food.domain.service.CidadeService;
+import com.wandson.food.domain.repository.CidadeRepository;
+import com.wandson.food.domain.service.CadastroCidadeService;
 
 @RestController
 @RequestMapping("/cidades")
 public class CidadeController {
 
 	@Autowired
-	private CidadeService cidadeService;
+	private CadastroCidadeService cidadeService;
+
+	@Autowired
+	private CidadeRepository cidadeRepository;
 
 	@GetMapping
 	public List<Cidade> listar() {
-		return cidadeService.listar();
+		return cidadeRepository.findAll();
 	}
 
 	@GetMapping("/{cidadeId}")

@@ -1,11 +1,10 @@
 package com.wandson.food.domain.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.wandson.food.domain.exception.CidadeNaoEncontradaException;
 import com.wandson.food.domain.exception.EntidadeEmUsoException;
@@ -13,16 +12,17 @@ import com.wandson.food.domain.model.Cidade;
 import com.wandson.food.domain.repository.CidadeRepository;
 
 @Service
-public class CidadeService {
+public class CadastroCidadeService {
 
 	private static final String MSG_CIDADE_EM_USO = "Cidade de código %d não pode ser removida, pois está em uso";
 
 	@Autowired
-	private EstadoService estadoService;
+	private CadastroEstadoService estadoService;
 
 	@Autowired
 	private CidadeRepository cidadeRepository;
 
+	@Transactional
 	public Cidade salvar(Cidade cidade) {
 		Long estadoId = cidade.getEstado().getId();
 		var estado = estadoService.buscarOuFalhar(estadoId);
@@ -30,14 +30,11 @@ public class CidadeService {
 		return cidadeRepository.save(cidade);
 	}
 
-	public List<Cidade> listar() {
-		return cidadeRepository.findAll();
-	}
-
 	public Cidade buscarOuFalhar(Long cidadeId) {
 		return cidadeRepository.findById(cidadeId).orElseThrow(() -> new CidadeNaoEncontradaException(cidadeId));
 	}
 
+	@Transactional
 	public void excluir(Long cidadeId) {
 		try {
 			cidadeRepository.deleteById(cidadeId);

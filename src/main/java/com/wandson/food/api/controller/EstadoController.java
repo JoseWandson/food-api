@@ -18,18 +18,22 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wandson.food.domain.model.Estado;
-import com.wandson.food.domain.service.EstadoService;
+import com.wandson.food.domain.repository.EstadoRepository;
+import com.wandson.food.domain.service.CadastroEstadoService;
 
 @RestController
 @RequestMapping("/estados")
 public class EstadoController {
 
 	@Autowired
-	private EstadoService estadoService;
+	private CadastroEstadoService estadoService;
+
+	@Autowired
+	private EstadoRepository estadoRepository;
 
 	@GetMapping
 	public List<Estado> listar() {
-		return estadoService.listar();
+		return estadoRepository.findAll();
 	}
 
 	@GetMapping("/{estadoId}")
