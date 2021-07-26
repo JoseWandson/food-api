@@ -27,6 +27,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.wandson.food.core.validation.Groups;
 
 import lombok.Data;
@@ -55,6 +56,7 @@ public class Restaurante {
 	@NotNull
 	@ManyToOne
 	@JoinColumn(nullable = false)
+	@JsonIgnoreProperties(value = "nome", allowGetters = true)
 	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
 	private Cozinha cozinha;
 
