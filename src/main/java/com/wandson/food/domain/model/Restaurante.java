@@ -26,8 +26,6 @@ import javax.validation.groups.Default;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.wandson.food.core.validation.Groups;
 
 import lombok.Data;
@@ -56,30 +54,24 @@ public class Restaurante {
 	@NotNull
 	@ManyToOne
 	@JoinColumn(nullable = false)
-	@JsonIgnoreProperties(value = "nome", allowGetters = true)
 	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
 	private Cozinha cozinha;
 
 	@Embedded
-	@JsonIgnore
 	private Endereco endereco;
 
-	@JsonIgnore
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
 	private LocalDateTime dataCadastro;
 
-	@JsonIgnore
 	@UpdateTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
 	private LocalDateTime dataAtualizacao;
 
-	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "restaurante_forma_pagamento", inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
 	private List<FormaPagamento> formasPagamento;
 
-	@JsonIgnore
 	@OneToMany(mappedBy = "restaurante")
 	private List<Produto> produtos;
 
