@@ -28,7 +28,7 @@ import com.wandson.food.domain.service.CadastroCidadeService;
 public class CidadeController {
 
 	@Autowired
-	private CadastroCidadeService cidadeService;
+	private CadastroCidadeService cadastroCidade;
 
 	@Autowired
 	private CidadeRepository cidadeRepository;
@@ -40,14 +40,14 @@ public class CidadeController {
 
 	@GetMapping("/{cidadeId}")
 	public Cidade buscar(@PathVariable Long cidadeId) {
-		return cidadeService.buscarOuFalhar(cidadeId);
+		return cadastroCidade.buscarOuFalhar(cidadeId);
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Cidade adicionar(@RequestBody @Valid Cidade cidade) {
 		try {
-			return cidadeService.salvar(cidade);
+			return cadastroCidade.salvar(cidade);
 		} catch (EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
@@ -56,9 +56,9 @@ public class CidadeController {
 	@PutMapping("/{cidadeId}")
 	public Cidade atualizar(@PathVariable Long cidadeId, @RequestBody @Valid Cidade cidade) {
 		try {
-			var cidadeAtual = cidadeService.buscarOuFalhar(cidadeId);
+			var cidadeAtual = cadastroCidade.buscarOuFalhar(cidadeId);
 			BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-			return cidadeService.salvar(cidadeAtual);
+			return cadastroCidade.salvar(cidadeAtual);
 		} catch (EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
@@ -67,7 +67,7 @@ public class CidadeController {
 	@DeleteMapping("/{cidadeId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long cidadeId) {
-		cidadeService.excluir(cidadeId);
+		cadastroCidade.excluir(cidadeId);
 	}
 
 }
