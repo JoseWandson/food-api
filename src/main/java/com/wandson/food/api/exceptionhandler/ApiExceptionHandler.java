@@ -1,6 +1,6 @@
 package com.wandson.food.api.exceptionhandler;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -95,10 +95,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			HttpStatus status, WebRequest request) {
 		if (Objects.isNull(body)) {
 			body = Problem.builder().title(status.getReasonPhrase()).status(status.value())
-					.userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL).timestamp(LocalDateTime.now()).build();
+					.userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL).timestamp(OffsetDateTime.now()).build();
 		} else if (body instanceof String) {
 			body = Problem.builder().title((String) body).status(status.value())
-					.userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL).timestamp(LocalDateTime.now()).build();
+					.userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL).timestamp(OffsetDateTime.now()).build();
 		}
 		return super.handleExceptionInternal(ex, body, headers, status, request);
 	}
@@ -149,7 +149,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String detail) {
 		return Problem.builder().status(status.value()).type(problemType.getUri()).title(problemType.getTitle())
-				.timestamp(LocalDateTime.now()).detail(detail);
+				.timestamp(OffsetDateTime.now()).detail(detail);
 	}
 
 	private ResponseEntity<Object> handleInvalidFormat(InvalidFormatException ex, HttpHeaders headers,
