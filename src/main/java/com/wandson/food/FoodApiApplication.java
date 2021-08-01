@@ -1,5 +1,7 @@
 package com.wandson.food;
 
+import java.util.TimeZone;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -11,6 +13,7 @@ import com.wandson.food.infrastructure.repository.CustomJpaRepositoryImpl;
 public class FoodApiApplication {
 
 	public static void main(String[] args) {
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 		SpringApplication.run(FoodApiApplication.class, args);
 	}
 
