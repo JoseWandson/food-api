@@ -30,9 +30,12 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wandson.food.api.model.CozinhaModel;
 import com.wandson.food.api.model.RestauranteModel;
+import com.wandson.food.api.model.input.CozinhaIdInput;
+import com.wandson.food.api.model.input.RestauranteInput;
 import com.wandson.food.core.validation.ValidacaoException;
 import com.wandson.food.domain.exception.CozinhaNaoEncontradaException;
 import com.wandson.food.domain.exception.NegocioException;
+import com.wandson.food.domain.model.Cozinha;
 import com.wandson.food.domain.model.Restaurante;
 import com.wandson.food.domain.repository.RestauranteRepository;
 import com.wandson.food.domain.service.CadastroRestauranteService;
@@ -64,8 +67,10 @@ public class RestauranteController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public RestauranteModel adicionar(@RequestBody @Valid Restaurante restaurante) {
+	public RestauranteModel adicionar(@RequestBody @Valid RestauranteInput restauranteInput) {
 		try {
+			Restaurante restaurante = toDomainObject(restauranteInput);
+
 			return toModel(cadastroRestaurante.salvar(restaurante));
 		} catch (CozinhaNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());
@@ -73,7 +78,10 @@ public class RestauranteController {
 	}
 
 	@PutMapping("/{restauranteId}")
-	public RestauranteModel atualizar(@PathVariable Long restauranteId, @RequestBody @Valid Restaurante restaurante) {
+	public RestauranteModel atualizar(@PathVariable Long restauranteId,
+			@RequestBody @Valid RestauranteInput restauranteInput) {
+		Restaurante restaurante = toDomainObject(restauranteInput);
+
 		var restauranteAtual = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
 		BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro",
@@ -94,7 +102,7 @@ public class RestauranteController {
 		merge(campos, restauranteAtual, request);
 		validate(restauranteAtual, "restaurante");
 
-		return atualizar(restauranteId, restauranteAtual);
+		return atualizar(restauranteId, toInput(restauranteAtual));
 	}
 
 	private void merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino, HttpServletRequest request) {
@@ -147,6 +155,32 @@ public class RestauranteController {
 
 	private List<RestauranteModel> toCollectionModel(List<Restaurante> restaurantes) {
 		return restaurantes.stream().map(this::toModel).collect(Collectors.toList());
+	}
+
+	private Restaurante toDomainObject(RestauranteInput restauranteInput) {
+		Restaurante restaurante = new Restaurante();
+		restaurante.setNome(restauranteInput.getNome());
+		restaurante.setTaxaFrete(restauranteInput.getTaxaFrete());
+
+		Cozinha cozinha = new Cozinha();
+		cozinha.setId(restauranteInput.getCozinha().getId());
+
+		restaurante.setCozinha(cozinha);
+
+		return restaurante;
+	}
+
+	private RestauranteInput toInput(Restaurante restaurante) {
+		RestauranteInput restauranteInput = new RestauranteInput();
+		restauranteInput.setNome(restaurante.getNome());
+		restauranteInput.setTaxaFrete(restaurante.getTaxaFrete());
+
+		CozinhaIdInput cozinhaIdInput = new CozinhaIdInput();
+		cozinhaIdInput.setId(restaurante.getCozinha().getId());
+
+		restauranteInput.setCozinha(cozinhaIdInput);
+
+		return restauranteInput;
 	}
 
 }

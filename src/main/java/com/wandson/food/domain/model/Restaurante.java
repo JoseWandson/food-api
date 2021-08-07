@@ -16,17 +16,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.groups.ConvertGroup;
-import javax.validation.groups.Default;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import com.wandson.food.core.validation.Groups;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -41,20 +33,14 @@ public class Restaurante {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotBlank
 	@Column(nullable = false)
 	private String nome;
 
-	@NotNull
-	@PositiveOrZero
 	@Column(nullable = false)
 	private BigDecimal taxaFrete;
 
-	@Valid
-	@NotNull
 	@ManyToOne
 	@JoinColumn(nullable = false)
-	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
 	private Cozinha cozinha;
 
 	@Embedded
