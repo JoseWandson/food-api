@@ -27,14 +27,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wandson.food.api.assembler.RestauranteInputAssembler;
+import com.wandson.food.api.assembler.RestauranteInputDisassembler;
 import com.wandson.food.api.assembler.RestauranteModelAssembler;
 import com.wandson.food.api.model.RestauranteModel;
-import com.wandson.food.api.model.input.CozinhaIdInput;
 import com.wandson.food.api.model.input.RestauranteInput;
 import com.wandson.food.core.validation.ValidacaoException;
 import com.wandson.food.domain.exception.CozinhaNaoEncontradaException;
 import com.wandson.food.domain.exception.NegocioException;
-import com.wandson.food.domain.model.Cozinha;
 import com.wandson.food.domain.model.Restaurante;
 import com.wandson.food.domain.repository.RestauranteRepository;
 import com.wandson.food.domain.service.CadastroRestauranteService;
@@ -55,6 +55,12 @@ public class RestauranteController {
 	@Autowired
 	private RestauranteModelAssembler restauranteModelAssembler;
 
+	@Autowired
+	private RestauranteInputAssembler restauranteInputAssembler;
+
+	@Autowired
+	private RestauranteInputDisassembler restauranteInputDisassembler;
+
 	@GetMapping
 	public List<RestauranteModel> listar() {
 		return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
@@ -71,7 +77,7 @@ public class RestauranteController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public RestauranteModel adicionar(@RequestBody @Valid RestauranteInput restauranteInput) {
 		try {
-			Restaurante restaurante = toDomainObject(restauranteInput);
+			Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
 
 			return restauranteModelAssembler.toModel(cadastroRestaurante.salvar(restaurante));
 		} catch (CozinhaNaoEncontradaException e) {
@@ -82,7 +88,7 @@ public class RestauranteController {
 	@PutMapping("/{restauranteId}")
 	public RestauranteModel atualizar(@PathVariable Long restauranteId,
 			@RequestBody @Valid RestauranteInput restauranteInput) {
-		Restaurante restaurante = toDomainObject(restauranteInput);
+		Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
 
 		var restauranteAtual = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
@@ -104,7 +110,7 @@ public class RestauranteController {
 		merge(campos, restauranteAtual, request);
 		validate(restauranteAtual, "restaurante");
 
-		return atualizar(restauranteId, toInput(restauranteAtual));
+		return atualizar(restauranteId, restauranteInputAssembler.toInput(restauranteAtual));
 	}
 
 	private void merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino, HttpServletRequest request) {
@@ -140,32 +146,6 @@ public class RestauranteController {
 		if (bindingResult.hasErrors()) {
 			throw new ValidacaoException(bindingResult);
 		}
-	}
-
-	private Restaurante toDomainObject(RestauranteInput restauranteInput) {
-		Restaurante restaurante = new Restaurante();
-		restaurante.setNome(restauranteInput.getNome());
-		restaurante.setTaxaFrete(restauranteInput.getTaxaFrete());
-
-		Cozinha cozinha = new Cozinha();
-		cozinha.setId(restauranteInput.getCozinha().getId());
-
-		restaurante.setCozinha(cozinha);
-
-		return restaurante;
-	}
-
-	private RestauranteInput toInput(Restaurante restaurante) {
-		RestauranteInput restauranteInput = new RestauranteInput();
-		restauranteInput.setNome(restaurante.getNome());
-		restauranteInput.setTaxaFrete(restaurante.getTaxaFrete());
-
-		CozinhaIdInput cozinhaIdInput = new CozinhaIdInput();
-		cozinhaIdInput.setId(restaurante.getCozinha().getId());
-
-		restauranteInput.setCozinha(cozinhaIdInput);
-
-		return restauranteInput;
 	}
 
 }
