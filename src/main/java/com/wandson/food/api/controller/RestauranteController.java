@@ -108,9 +108,11 @@ public class RestauranteController {
 		var restauranteAtual = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
 		merge(campos, restauranteAtual, request);
-		validate(restauranteAtual, "restaurante");
 
-		return atualizar(restauranteId, restauranteInputAssembler.toInput(restauranteAtual));
+		RestauranteInput restauranteInput = restauranteInputAssembler.toInput(restauranteAtual);
+		validate(restauranteInput, "restaurante");
+
+		return atualizar(restauranteId, restauranteInput);
 	}
 
 	private void merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino, HttpServletRequest request) {
@@ -139,7 +141,7 @@ public class RestauranteController {
 		}
 	}
 
-	private void validate(Restaurante restaurante, String objectName) {
+	private void validate(RestauranteInput restaurante, String objectName) {
 		var bindingResult = new BeanPropertyBindingResult(restaurante, objectName);
 		validator.validate(restaurante, bindingResult);
 
