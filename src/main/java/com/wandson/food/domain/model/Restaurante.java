@@ -45,6 +45,7 @@ public class Restaurante {
 
 	@Embedded
 	private Endereco endereco;
+	private Boolean ativo;
 
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
@@ -64,6 +65,16 @@ public class Restaurante {
 	public Restaurante() {
 		formasPagamento = new ArrayList<>();
 		produtos = new ArrayList<>();
+
+		ativar();
+	}
+
+	public void ativar() {
+		ativo = true;
+	}
+
+	public void inativar() {
+		ativo = false;
 	}
 
 }
