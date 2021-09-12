@@ -12,7 +12,10 @@ import com.wandson.food.domain.repository.RestauranteRepository;
 public class CadastroRestauranteService {
 
 	@Autowired
-	private CadastroCozinhaService cozinhaService;
+	private CadastroCozinhaService cadastroCozinha;
+
+	@Autowired
+	private CadastroCidadeService cadastroCidade;
 
 	@Autowired
 	private RestauranteRepository restauranteRepository;
@@ -25,9 +28,14 @@ public class CadastroRestauranteService {
 	@Transactional
 	public Restaurante salvar(Restaurante restaurante) {
 		Long cozinhaId = restaurante.getCozinha().getId();
-		var cozinha = cozinhaService.buscarOuFalhar(cozinhaId);
+		Long cidadeId = restaurante.getEndereco().getCidade().getId();
+
+		var cozinha = cadastroCozinha.buscarOuFalhar(cozinhaId);
+		var cidade = cadastroCidade.buscarOuFalhar(cidadeId);
 
 		restaurante.setCozinha(cozinha);
+		restaurante.getEndereco().setCidade(cidade);
+
 		return restauranteRepository.save(restaurante);
 	}
 

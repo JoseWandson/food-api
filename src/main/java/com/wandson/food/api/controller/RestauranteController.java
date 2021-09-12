@@ -33,6 +33,7 @@ import com.wandson.food.api.assembler.RestauranteModelAssembler;
 import com.wandson.food.api.model.RestauranteModel;
 import com.wandson.food.api.model.input.RestauranteInput;
 import com.wandson.food.core.validation.ValidacaoException;
+import com.wandson.food.domain.exception.CidadeNaoEncontradaException;
 import com.wandson.food.domain.exception.CozinhaNaoEncontradaException;
 import com.wandson.food.domain.exception.NegocioException;
 import com.wandson.food.domain.model.Restaurante;
@@ -80,7 +81,7 @@ public class RestauranteController {
 			Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
 
 			return restauranteModelAssembler.toModel(cadastroRestaurante.salvar(restaurante));
-		} catch (CozinhaNaoEncontradaException e) {
+		} catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());
 		}
 	}
@@ -94,7 +95,7 @@ public class RestauranteController {
 
 		try {
 			return restauranteModelAssembler.toModel(cadastroRestaurante.salvar(restauranteAtual));
-		} catch (CozinhaNaoEncontradaException e) {
+		} catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());
 		}
 	}
