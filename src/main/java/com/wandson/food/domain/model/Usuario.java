@@ -49,4 +49,12 @@ public class Usuario {
 		grupos = new ArrayList<>();
 	}
 
+	public boolean senhaCoincideCom(String senha) {
+		return this.senha.equals(senha);
+	}
+
+	public boolean senhaNaoCoincideCom(String senha) {
+		return !senhaCoincideCom(senha);
+	}
+
 }
