@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wandson.food.domain.exception.RestauranteNaoEncontradoException;
+import com.wandson.food.domain.model.FormaPagamento;
 import com.wandson.food.domain.model.Restaurante;
 import com.wandson.food.domain.repository.RestauranteRepository;
 
@@ -16,6 +17,9 @@ public class CadastroRestauranteService {
 
 	@Autowired
 	private CadastroCidadeService cadastroCidade;
+
+	@Autowired
+	private CadastroFormaPagamentoService cadastroFormaPagamento;
 
 	@Autowired
 	private RestauranteRepository restauranteRepository;
@@ -49,6 +53,22 @@ public class CadastroRestauranteService {
 	public void inativar(Long restauranteId) {
 		Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
 		restauranteAtual.inativar();
+	}
+
+	@Transactional
+	public void desassociarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		FormaPagamento formaPagamento = cadastroFormaPagamento.buscarOuFalhar(formaPagamentoId);
+
+		restaurante.removerFormaPagamento(formaPagamento);
+	}
+
+	@Transactional
+	public void associarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		FormaPagamento formaPagamento = cadastroFormaPagamento.buscarOuFalhar(formaPagamentoId);
+
+		restaurante.adicionarFormaPagamento(formaPagamento);
 	}
 
 }

@@ -3,7 +3,9 @@ package com.wandson.food.domain.model;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -57,13 +59,13 @@ public class Restaurante {
 
 	@ManyToMany
 	@JoinTable(name = "restaurante_forma_pagamento", inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
-	private List<FormaPagamento> formasPagamento;
+	private Set<FormaPagamento> formasPagamento;
 
 	@OneToMany(mappedBy = "restaurante")
 	private List<Produto> produtos;
 
 	public Restaurante() {
-		formasPagamento = new ArrayList<>();
+		formasPagamento = new HashSet<>();
 		produtos = new ArrayList<>();
 
 		ativar();
@@ -75,6 +77,14 @@ public class Restaurante {
 
 	public void inativar() {
 		ativo = false;
+	}
+
+	public boolean removerFormaPagamento(FormaPagamento formaPagamento) {
+		return formasPagamento.remove(formaPagamento);
+	}
+
+	public boolean adicionarFormaPagamento(FormaPagamento formaPagamento) {
+		return formasPagamento.add(formaPagamento);
 	}
 
 }
