@@ -9,12 +9,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wandson.food.domain.exception.EntidadeEmUsoException;
 import com.wandson.food.domain.exception.GrupoNaoEncontradoException;
 import com.wandson.food.domain.model.Grupo;
+import com.wandson.food.domain.model.Permissao;
 import com.wandson.food.domain.repository.GrupoRepository;
 
 @Service
 public class CadastroGrupoService {
 
 	private static final String MSG_GRUPO_EM_USO = "Grupo de código %d não pode ser removido, pois está em uso";
+
+	@Autowired
+	private CadastroPermissaoService cadastroPermissao;
 
 	@Autowired
 	private GrupoRepository grupoRepository;
@@ -36,6 +40,22 @@ public class CadastroGrupoService {
 		} catch (DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(String.format(MSG_GRUPO_EM_USO, grupoId));
 		}
+	}
+
+	@Transactional
+	public void desassociarPermissao(Long grupoId, Long permissaoId) {
+		Grupo grupo = buscarOuFalhar(grupoId);
+		Permissao permissao = cadastroPermissao.buscarOuFalhar(permissaoId);
+
+		grupo.removerPermissao(permissao);
+	}
+
+	@Transactional
+	public void associarPermissao(Long grupoId, Long permissaoId) {
+		Grupo grupo = buscarOuFalhar(grupoId);
+		Permissao permissao = cadastroPermissao.buscarOuFalhar(permissaoId);
+
+		grupo.adicionarPermissao(permissao);
 	}
 
 	public Grupo buscarOuFalhar(Long grupoId) {

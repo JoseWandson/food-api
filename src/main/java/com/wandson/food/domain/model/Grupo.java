@@ -1,7 +1,7 @@
 package com.wandson.food.domain.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,11 +29,19 @@ public class Grupo {
 	private String nome;
 
 	@ManyToMany
-	@JoinTable(name = "grupo_permissao", inverseJoinColumns = @JoinColumn(name = "permissao_id"))
-	private List<Permissao> permissoes;
+	@JoinTable(name = "grupo_permissao", joinColumns = @JoinColumn(name = "grupo_id"), inverseJoinColumns = @JoinColumn(name = "permissao_id"))
+	private Set<Permissao> permissoes;
 
 	public Grupo() {
-		permissoes = new ArrayList<>();
+		permissoes = new HashSet<>();
+	}
+
+	public boolean removerPermissao(Permissao permissao) {
+		return permissoes.remove(permissao);
+	}
+
+	public boolean adicionarPermissao(Permissao permissao) {
+		return permissoes.add(permissao);
 	}
 
 }
