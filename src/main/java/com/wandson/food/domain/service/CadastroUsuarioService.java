@@ -8,11 +8,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.wandson.food.domain.exception.NegocioException;
 import com.wandson.food.domain.exception.UsuarioNaoEncontradoException;
+import com.wandson.food.domain.model.Grupo;
 import com.wandson.food.domain.model.Usuario;
 import com.wandson.food.domain.repository.UsuarioRepository;
 
 @Service
 public class CadastroUsuarioService {
+
+	@Autowired
+	private CadastroGrupoService cadastroGrupo;
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
@@ -38,6 +42,22 @@ public class CadastroUsuarioService {
 		}
 
 		usuario.setSenha(novaSenha);
+	}
+
+	@Transactional
+	public void desassociarGrupo(Long usuarioId, Long grupoId) {
+		Usuario usuario = buscarOuFalhar(usuarioId);
+		Grupo grupo = cadastroGrupo.buscarOuFalhar(grupoId);
+
+		usuario.removerGrupo(grupo);
+	}
+
+	@Transactional
+	public void associarGrupo(Long usuarioId, Long grupoId) {
+		Usuario usuario = buscarOuFalhar(usuarioId);
+		Grupo grupo = cadastroGrupo.buscarOuFalhar(grupoId);
+
+		usuario.adicionarGrupo(grupo);
 	}
 
 	public Usuario buscarOuFalhar(Long usuarioId) {

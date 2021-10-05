@@ -1,8 +1,8 @@
 package com.wandson.food.domain.model;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,11 +42,11 @@ public class Usuario {
 	private OffsetDateTime dataCadastro;
 
 	@ManyToMany
-	@JoinTable(name = "usuario_grupo", inverseJoinColumns = @JoinColumn(name = "grupo_id"))
-	private List<Grupo> grupos;
+	@JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "grupo_id"))
+	private Set<Grupo> grupos;
 
 	public Usuario() {
-		grupos = new ArrayList<>();
+		grupos = new HashSet<>();
 	}
 
 	public boolean senhaCoincideCom(String senha) {
@@ -55,6 +55,14 @@ public class Usuario {
 
 	public boolean senhaNaoCoincideCom(String senha) {
 		return !senhaCoincideCom(senha);
+	}
+
+	public boolean removerGrupo(Grupo grupo) {
+		return grupos.remove(grupo);
+	}
+
+	public boolean adicionarGrupo(Grupo grupo) {
+		return grupos.add(grupo);
 	}
 
 }
