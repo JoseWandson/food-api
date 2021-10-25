@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wandson.food.domain.exception.RestauranteNaoEncontradoException;
 import com.wandson.food.domain.model.FormaPagamento;
 import com.wandson.food.domain.model.Restaurante;
+import com.wandson.food.domain.model.Usuario;
 import com.wandson.food.domain.repository.RestauranteRepository;
 
 @Service
@@ -20,6 +21,9 @@ public class CadastroRestauranteService {
 
 	@Autowired
 	private CadastroFormaPagamentoService cadastroFormaPagamento;
+
+	@Autowired
+	private CadastroUsuarioService cadastroUsuario;
 
 	@Autowired
 	private RestauranteRepository restauranteRepository;
@@ -81,6 +85,22 @@ public class CadastroRestauranteService {
 	public void fechar(Long restauranteId) {
 		Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
 		restauranteAtual.fechar();
+	}
+
+	@Transactional
+	public void desassociarResponsavel(Long restauranteId, Long usuarioId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		Usuario usuario = cadastroUsuario.buscarOuFalhar(usuarioId);
+
+		restaurante.removerResponsavel(usuario);
+	}
+
+	@Transactional
+	public void associarResponsavel(Long restauranteId, Long usuarioId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		Usuario usuario = cadastroUsuario.buscarOuFalhar(usuarioId);
+
+		restaurante.adicionarResponsavel(usuario);
 	}
 
 }
