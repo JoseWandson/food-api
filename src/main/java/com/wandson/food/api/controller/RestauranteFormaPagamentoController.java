@@ -19,7 +19,7 @@ import com.wandson.food.domain.service.CadastroRestauranteService;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/formas-pagamento")
-public class RestauranteFormaPagamamentoController {
+public class RestauranteFormaPagamentoController {
 
 	@Autowired
 	private CadastroRestauranteService cadastroRestaurante;
