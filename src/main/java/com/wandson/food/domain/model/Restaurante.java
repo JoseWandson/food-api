@@ -111,4 +111,12 @@ public class Restaurante {
 		return responsaveis.add(usuario);
 	}
 
+	public boolean naoAceitaFormaPagamento(FormaPagamento formaPagamento) {
+		return !aceitaFormaPagamento(formaPagamento);
+	}
+
+	private boolean aceitaFormaPagamento(FormaPagamento formaPagamento) {
+		return formasPagamento.contains(formaPagamento);
+	}
+
 }

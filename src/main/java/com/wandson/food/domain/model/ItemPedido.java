@@ -1,6 +1,7 @@
 package com.wandson.food.domain.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,5 +35,20 @@ public class ItemPedido {
 	@ManyToOne
 	@JoinColumn(nullable = false)
 	private Produto produto;
+
+	public void calcularPrecoTotal() {
+		BigDecimal precoUnitarioAux = precoUnitario;
+		Integer quantidadeAux = quantidade;
+
+		if (Objects.isNull(precoUnitarioAux)) {
+			precoUnitarioAux = BigDecimal.ZERO;
+		}
+
+		if (Objects.isNull(quantidadeAux)) {
+			quantidadeAux = 0;
+		}
+
+		precoTotal = precoUnitarioAux.multiply(new BigDecimal(quantidadeAux));
+	}
 
 }

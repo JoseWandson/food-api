@@ -5,7 +5,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.wandson.food.api.model.EnderecoModel;
+import com.wandson.food.api.model.input.ItemPedidoInput;
 import com.wandson.food.domain.model.Endereco;
+import com.wandson.food.domain.model.ItemPedido;
 
 @Configuration
 public class ModelMapperConfig {
@@ -13,6 +15,9 @@ public class ModelMapperConfig {
 	@Bean
 	public ModelMapper modelMapper() {
 		var modelMapper = new ModelMapper();
+		modelMapper.createTypeMap(ItemPedidoInput.class, ItemPedido.class)
+				.addMappings(mapper -> mapper.skip(ItemPedido::setId));
+
 		var enderecoToEnderecoModelTypeMap = modelMapper.createTypeMap(Endereco.class, EnderecoModel.class);
 		enderecoToEnderecoModelTypeMap.<String>addMapping(enderecoSrc -> enderecoSrc.getCidade().getEstado().getNome(),
 				(enderecoModelDest, value) -> enderecoModelDest.getCidade().setEstado(value));
