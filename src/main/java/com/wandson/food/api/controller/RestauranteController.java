@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wandson.food.api.assembler.RestauranteInputAssembler;
@@ -32,6 +33,7 @@ import com.wandson.food.api.assembler.RestauranteInputDisassembler;
 import com.wandson.food.api.assembler.RestauranteModelAssembler;
 import com.wandson.food.api.model.RestauranteModel;
 import com.wandson.food.api.model.input.RestauranteInput;
+import com.wandson.food.api.model.view.RestauranteView;
 import com.wandson.food.core.validation.ValidacaoException;
 import com.wandson.food.domain.exception.CidadeNaoEncontradaException;
 import com.wandson.food.domain.exception.CozinhaNaoEncontradaException;
@@ -64,8 +66,15 @@ public class RestauranteController {
 	private RestauranteInputDisassembler restauranteInputDisassembler;
 
 	@GetMapping
+	@JsonView(RestauranteView.Resumo.class)
 	public List<RestauranteModel> listar() {
 		return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
+	}
+
+	@JsonView(RestauranteView.ApenasNome.class)
+	@GetMapping(params = "projecao=apenas-nome")
+	public List<RestauranteModel> listarApenasNomes() {
+		return listar();
 	}
 
 	@GetMapping("/{restauranteId}")
