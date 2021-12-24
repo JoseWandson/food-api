@@ -25,7 +25,9 @@ import com.wandson.food.domain.exception.NegocioException;
 import com.wandson.food.domain.model.Pedido;
 import com.wandson.food.domain.model.Usuario;
 import com.wandson.food.domain.repository.PedidoRepository;
+import com.wandson.food.domain.repository.filter.PedidoFilter;
 import com.wandson.food.domain.service.EmissaoPedidoService;
+import com.wandson.food.infrastructure.repository.spec.PedidoSpecs;
 
 @RestController
 @RequestMapping(value = "/pedidos")
@@ -47,8 +49,8 @@ public class PedidoController {
 	private PedidoInputDisassembler pedidoInputDisassembler;
 
 	@GetMapping
-	public List<PedidoResumoModel> listar() {
-		List<Pedido> todosPedidos = pedidoRepository.findAll();
+	public List<PedidoResumoModel> pesquisar(PedidoFilter filtro) {
+		List<Pedido> todosPedidos = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro));
 
 		return pedidoResumoModelAssembler.toCollectionModel(todosPedidos);
 	}
