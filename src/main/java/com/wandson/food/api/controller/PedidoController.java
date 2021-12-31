@@ -1,6 +1,7 @@
 package com.wandson.food.api.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -24,6 +25,7 @@ import com.wandson.food.api.assembler.PedidoResumoModelAssembler;
 import com.wandson.food.api.model.PedidoModel;
 import com.wandson.food.api.model.PedidoResumoModel;
 import com.wandson.food.api.model.input.PedidoInput;
+import com.wandson.food.core.data.PageableTranslator;
 import com.wandson.food.domain.exception.EntidadeNaoEncontradaException;
 import com.wandson.food.domain.exception.NegocioException;
 import com.wandson.food.domain.model.Pedido;
@@ -54,6 +56,8 @@ public class PedidoController {
 
 	@GetMapping
 	public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable) {
+		pageable = traduzirPageable(pageable);
+
 		Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
 
 		List<PedidoResumoModel> pedidosResumoModel = pedidoResumoModelAssembler
@@ -84,6 +88,14 @@ public class PedidoController {
 		} catch (EntidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
+	}
+
+	private Pageable traduzirPageable(Pageable apiPageable) {
+		var mapeamento = Map.of("codigo", "codigo", "subtotal", "subtotal", "taxaFrete", "taxaFrete", "valorTotal",
+				"valorTotal", "dataCriacao", "dataCriacao", "restaurante.nome", "restaurante.nome", "restaurante.id",
+				"restaurante.id", "cliente.id", "cliente.id", "cliente.nome", "cliente.nome");
+
+		return PageableTranslator.translate(apiPageable, mapeamento);
 	}
 
 }
