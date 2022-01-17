@@ -1,4 +1,4 @@
-package com.wandson.food.domain.repository.filter;
+package com.wandson.food.domain.filter;
 
 import java.time.OffsetDateTime;
 

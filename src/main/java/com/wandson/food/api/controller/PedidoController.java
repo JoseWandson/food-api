@@ -28,10 +28,10 @@ import com.wandson.food.api.model.input.PedidoInput;
 import com.wandson.food.core.data.PageableTranslator;
 import com.wandson.food.domain.exception.EntidadeNaoEncontradaException;
 import com.wandson.food.domain.exception.NegocioException;
+import com.wandson.food.domain.filter.PedidoFilter;
 import com.wandson.food.domain.model.Pedido;
 import com.wandson.food.domain.model.Usuario;
 import com.wandson.food.domain.repository.PedidoRepository;
-import com.wandson.food.domain.repository.filter.PedidoFilter;
 import com.wandson.food.domain.service.EmissaoPedidoService;
 import com.wandson.food.infrastructure.repository.spec.PedidoSpecs;
 

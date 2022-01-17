@@ -7,8 +7,8 @@ import javax.persistence.criteria.Predicate;
 
 import org.springframework.data.jpa.domain.Specification;
 
+import com.wandson.food.domain.filter.PedidoFilter;
 import com.wandson.food.domain.model.Pedido;
-import com.wandson.food.domain.repository.filter.PedidoFilter;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
