@@ -1,4 +1,4 @@
-package com.wandson.food.infrastructure.service;
+package com.wandson.food.infrastructure.service.query;
 
 import java.util.ArrayList;
 import java.util.Date;
