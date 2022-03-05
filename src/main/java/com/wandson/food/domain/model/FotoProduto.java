@@ -1,5 +1,7 @@
 package com.wandson.food.domain.model;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -27,5 +29,12 @@ public class FotoProduto {
 	@MapsId
 	@OneToOne(fetch = FetchType.LAZY)
 	private Produto produto;
+
+	public Long getRestauranteId() {
+		if (Objects.nonNull(produto)) {
+			return produto.getRestaurante().getId();
+		}
+		return null;
+	}
 
 }
