@@ -26,6 +26,8 @@ public interface FotoStorageService {
 
 	void remover(String nomeArquivo);
 
+	InputStream recuperar(String nomeArquivo);
+
 	@Getter
 	@Builder
 	class NovaFoto {
