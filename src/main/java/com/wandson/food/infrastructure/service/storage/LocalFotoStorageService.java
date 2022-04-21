@@ -6,13 +6,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
 import com.wandson.food.core.storage.StorageProperties;
 import com.wandson.food.domain.service.FotoStorageService;
 
-@Service
 public class LocalFotoStorageService implements FotoStorageService {
 
 	@Autowired
