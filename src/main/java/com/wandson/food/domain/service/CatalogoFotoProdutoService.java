@@ -38,7 +38,8 @@ public class CatalogoFotoProdutoService {
 		foto = produtoRepository.save(foto);
 		produtoRepository.flush();
 
-		NovaFoto novaFoto = NovaFoto.builder().nomeArquivo(nomeNovoArquivo).inputStream(dadosArquivo).build();
+		NovaFoto novaFoto = NovaFoto.builder().nomeArquivo(nomeNovoArquivo).contentType(foto.getContentType())
+				.inputStream(dadosArquivo).build();
 		fotoStorage.substituir(nomeArquivoExistente, novaFoto);
 
 		return foto;
