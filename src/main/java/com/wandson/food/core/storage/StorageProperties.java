@@ -18,10 +18,12 @@ public class StorageProperties {
 
 	private Local local;
 	private S3 s3;
+	private TipoStorage tipo;
 
 	public StorageProperties() {
 		local = new Local();
 		s3 = new S3();
+		tipo = TipoStorage.LOCAL;
 	}
 
 	@Getter
@@ -38,6 +40,10 @@ public class StorageProperties {
 		private String bucket;
 		private Regions regiao;
 		private String diretorioFotos;
+	}
+
+	public enum TipoStorage {
+		LOCAL, S3;
 	}
 
 }
