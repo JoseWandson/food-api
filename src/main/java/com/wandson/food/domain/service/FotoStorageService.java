@@ -26,7 +26,7 @@ public interface FotoStorageService {
 
 	void remover(String nomeArquivo);
 
-	InputStream recuperar(String nomeArquivo);
+	FotoRecuperada recuperar(String nomeArquivo);
 
 	@Getter
 	@Builder
@@ -34,6 +34,17 @@ public interface FotoStorageService {
 		private String nomeArquivo;
 		private String contentType;
 		private InputStream inputStream;
+	}
+
+	@Getter
+	@Builder
+	class FotoRecuperada {
+		private InputStream inputStream;
+		private String url;
+
+		public boolean temUrl() {
+			return StringUtils.isNotBlank(url);
+		}
 	}
 
 }
