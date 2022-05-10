@@ -19,4 +19,14 @@ public class EmailProperties {
 	@NotBlank
 	private String remetente;
 
+	private Implementacao impl;
+
+	public EmailProperties() {
+		impl = Implementacao.FAKE;
+	}
+
+	public enum Implementacao {
+		SMTP, FAKE
+	}
+
 }
