@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.wandson.food.domain.service.EnvioEmailService;
 import com.wandson.food.infrastructure.service.email.FakeEnvioEmailService;
+import com.wandson.food.infrastructure.service.email.SandboxEnvioEmailService;
 import com.wandson.food.infrastructure.service.email.SmtpEnvioEmailService;
 
 @Configuration
@@ -15,6 +16,7 @@ public class EmailConfig {
 		return switch (emailProperties.getImpl()) {
 		case FAKE -> new FakeEnvioEmailService();
 		case SMTP -> new SmtpEnvioEmailService();
+		case SANDBOX -> new SandboxEnvioEmailService();
 		};
 	}
 }
