@@ -50,7 +50,8 @@ public class FormaPagamentoController {
 		List<FormaPagamentoModel> formasPagamentosModel = formaPagamentoModelAssembler
 				.toCollectionModel(todasFormasPagamentos);
 
-		return ResponseEntity.ok().cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS)).body(formasPagamentosModel);
+		return ResponseEntity.ok().cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic())
+				.body(formasPagamentosModel);
 	}
 
 	@GetMapping("/{formaPagamentoId}")
