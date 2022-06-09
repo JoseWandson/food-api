@@ -26,7 +26,10 @@ import com.wandson.food.domain.model.Cidade;
 import com.wandson.food.domain.repository.CidadeRepository;
 import com.wandson.food.domain.service.CadastroCidadeService;
 
+import io.swagger.annotations.Api;
+
 @RestController
+@Api(tags = "Cidades")
 @RequestMapping("/cidades")
 public class CidadeController {
 
@@ -70,7 +73,7 @@ public class CidadeController {
 	public CidadeModel atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeInput cidadeInput) {
 		try {
 			Cidade cidadeAtual = cadastroCidade.buscarOuFalhar(cidadeId);
-			
+
 			cidadeInputDisassembler.copyToDomainObject(cidadeInput, cidadeAtual);
 
 			cidadeAtual = cadastroCidade.salvar(cidadeAtual);
