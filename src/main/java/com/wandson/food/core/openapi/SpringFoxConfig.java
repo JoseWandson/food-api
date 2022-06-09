@@ -14,7 +14,8 @@ public class SpringFoxConfig {
 
 	@Bean
 	public Docket apiDocket() {
-		return new Docket(DocumentationType.OAS_30).select().apis(RequestHandlerSelectors.any()).build();
+		return new Docket(DocumentationType.OAS_30).select()
+				.apis(RequestHandlerSelectors.basePackage("com.wandson.food.api")).build();
 	}
 
 }
