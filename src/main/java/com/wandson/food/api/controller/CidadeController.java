@@ -27,6 +27,7 @@ import com.wandson.food.domain.repository.CidadeRepository;
 import com.wandson.food.domain.service.CadastroCidadeService;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @Api(tags = "Cidades")
@@ -46,12 +47,14 @@ public class CidadeController {
 	private CidadeInputDisassembler cidadeInputDisassembler;
 
 	@GetMapping
+	@ApiOperation("Lista as cidades")
 	public List<CidadeModel> listar() {
 		List<Cidade> todasCidades = cidadeRepository.findAll();
 		return cidadeModelAssembler.toCollectionModel(todasCidades);
 	}
 
 	@GetMapping("/{cidadeId}")
+	@ApiOperation("Busca uma cidade por ID")
 	public CidadeModel buscar(@PathVariable Long cidadeId) {
 		Cidade cidade = cadastroCidade.buscarOuFalhar(cidadeId);
 		return cidadeModelAssembler.toModel(cidade);
@@ -59,6 +62,7 @@ public class CidadeController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
+	@ApiOperation("Cadastra uma cidade")
 	public CidadeModel adicionar(@RequestBody @Valid CidadeInput cidadeInput) {
 		try {
 			Cidade cidade = cidadeInputDisassembler.toDomainObject(cidadeInput);
@@ -70,6 +74,7 @@ public class CidadeController {
 	}
 
 	@PutMapping("/{cidadeId}")
+	@ApiOperation("Atualiza uma cidade por ID")
 	public CidadeModel atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeInput cidadeInput) {
 		try {
 			Cidade cidadeAtual = cadastroCidade.buscarOuFalhar(cidadeId);
@@ -85,6 +90,7 @@ public class CidadeController {
 
 	@DeleteMapping("/{cidadeId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@ApiOperation("Exclui uma cidade por ID")
 	public void remover(@PathVariable Long cidadeId) {
 		cadastroCidade.excluir(cidadeId);
 	}
