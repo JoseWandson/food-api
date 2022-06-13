@@ -2,7 +2,6 @@ package com.wandson.food.api.assembler;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ public class PermissaoModelAssembler {
 	}
 
 	public List<PermissaoModel> toCollectionModel(Collection<Permissao> permissoes) {
-		return permissoes.stream().map(this::toModel).collect(Collectors.toList());
+		return permissoes.stream().map(this::toModel).toList();
 	}
 
 }

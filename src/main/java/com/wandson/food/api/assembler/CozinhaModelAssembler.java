@@ -1,7 +1,6 @@
 package com.wandson.food.api.assembler;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,6 @@ public class CozinhaModelAssembler {
 	}
 
 	public List<CozinhaModel> toCollectionModel(List<Cozinha> cozinhas) {
-		return cozinhas.stream().map(this::toModel).collect(Collectors.toList());
+		return cozinhas.stream().map(this::toModel).toList();
 	}
 }

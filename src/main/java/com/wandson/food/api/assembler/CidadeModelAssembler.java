@@ -1,7 +1,6 @@
 package com.wandson.food.api.assembler;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,6 @@ public class CidadeModelAssembler {
 	}
 
 	public List<CidadeModel> toCollectionModel(List<Cidade> cidades) {
-		return cidades.stream().map(this::toModel).collect(Collectors.toList());
+		return cidades.stream().map(this::toModel).toList();
 	}
 }

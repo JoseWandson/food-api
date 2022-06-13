@@ -2,7 +2,6 @@ package com.wandson.food.api.assembler;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ public class UsuarioModelAssembler {
 	}
 
 	public List<UsuarioModel> toCollectionModel(Collection<Usuario> usuarios) {
-		return usuarios.stream().map(this::toModel).collect(Collectors.toList());
+		return usuarios.stream().map(this::toModel).toList();
 	}
 
 }

@@ -98,9 +98,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		if (Objects.isNull(body)) {
 			body = Problem.builder().title(status.getReasonPhrase()).status(status.value())
 					.userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL).timestamp(OffsetDateTime.now()).build();
-		} else if (body instanceof String) {
-			body = Problem.builder().title((String) body).status(status.value())
-					.userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL).timestamp(OffsetDateTime.now()).build();
+		} else if (body instanceof String string) {
+			body = Problem.builder().title(string).status(status.value()).userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+					.timestamp(OffsetDateTime.now()).build();
 		}
 		return super.handleExceptionInternal(ex, body, headers, status, request);
 	}
@@ -109,11 +109,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		Throwable rootCause = ExceptionUtils.getRootCause(ex);
-		if (rootCause instanceof InvalidFormatException) {
-			return handleInvalidFormat((InvalidFormatException) rootCause, headers, status, request);
+		if (rootCause instanceof InvalidFormatException invalidFormatException) {
+			return handleInvalidFormat(invalidFormatException, headers, status, request);
 		}
-		if (rootCause instanceof PropertyBindingException) {
-			return handlePropertyBinding((PropertyBindingException) rootCause, headers, status, request);
+		if (rootCause instanceof PropertyBindingException propertyBindingException) {
+			return handlePropertyBinding(propertyBindingException, headers, status, request);
 		}
 
 		var problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
@@ -126,8 +126,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
-		if (ex instanceof MethodArgumentTypeMismatchException) {
-			return handleMethodArgumentTypeMismatch((MethodArgumentTypeMismatchException) ex, headers, status, request);
+		if (ex instanceof MethodArgumentTypeMismatchException methodArgumentTypeMismatchException) {
+			return handleMethodArgumentTypeMismatch(methodArgumentTypeMismatchException, headers, status, request);
 		}
 
 		return super.handleTypeMismatch(ex, headers, status, request);
@@ -216,12 +216,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 			String name = objectError.getObjectName();
 
-			if (objectError instanceof FieldError) {
-				name = ((FieldError) objectError).getField();
+			if (objectError instanceof FieldError fieldError) {
+				name = fieldError.getField();
 			}
 
 			return Problem.Object.builder().name(name).userMessage(message).build();
-		}).collect(Collectors.toList());
+		}).toList();
 
 		var problem = createProblemBuilder(status, problemType, detail).userMessage(detail).objects(problemObjects)
 				.build();

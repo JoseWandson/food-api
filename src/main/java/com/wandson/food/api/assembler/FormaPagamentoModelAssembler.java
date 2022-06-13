@@ -2,7 +2,6 @@ package com.wandson.food.api.assembler;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ public class FormaPagamentoModelAssembler {
 	}
 
 	public List<FormaPagamentoModel> toCollectionModel(Collection<FormaPagamento> formasPagamentos) {
-		return formasPagamentos.stream().map(this::toModel).collect(Collectors.toList());
+		return formasPagamentos.stream().map(this::toModel).toList();
 	}
 
 }
