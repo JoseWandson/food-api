@@ -61,6 +61,7 @@ public class SpringFoxConfig {
 						.description("Recurso não possui representação que pode ser aceita pelo consumidor")
 						.representation(MediaType.APPLICATION_JSON).apply(getProblemaModelReference()).build(),
 				new ResponseBuilder().code(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
+						.representation(MediaType.APPLICATION_JSON).apply(getProblemaModelReference())
 						.description("Erro interno do Servidor").build());
 	}
 
