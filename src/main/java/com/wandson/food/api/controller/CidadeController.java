@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wandson.food.api.assembler.CidadeInputDisassembler;
 import com.wandson.food.api.assembler.CidadeModelAssembler;
-import com.wandson.food.api.controller.openapi.CidadeControllerOpenApi;
 import com.wandson.food.api.model.CidadeModel;
 import com.wandson.food.api.model.input.CidadeInput;
+import com.wandson.food.api.openapi.controller.CidadeControllerOpenApi;
 import com.wandson.food.domain.exception.EstadoNaoEncontradoException;
 import com.wandson.food.domain.exception.NegocioException;
 import com.wandson.food.domain.model.Cidade;

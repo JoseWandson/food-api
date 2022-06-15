@@ -1,4 +1,4 @@
-package com.wandson.food.api.controller.openapi;
+package com.wandson.food.api.openapi.controller;
 
 import java.util.List;
 

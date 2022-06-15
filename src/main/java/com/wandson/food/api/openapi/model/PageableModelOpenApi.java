@@ -1,4 +1,4 @@
-package com.wandson.food.core.openapi.model;
+package com.wandson.food.api.openapi.model;
 
 import java.util.List;
 
