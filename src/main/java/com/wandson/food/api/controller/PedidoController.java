@@ -35,6 +35,8 @@ import com.wandson.food.domain.repository.PedidoRepository;
 import com.wandson.food.domain.service.EmissaoPedidoService;
 import com.wandson.food.infrastructure.repository.spec.PedidoSpecs;
 
+import io.swagger.annotations.ApiImplicitParam;
+
 @RestController
 @RequestMapping(value = "/pedidos")
 public class PedidoController {
@@ -55,6 +57,7 @@ public class PedidoController {
 	private PedidoInputDisassembler pedidoInputDisassembler;
 
 	@GetMapping
+	@ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula", name = "campos", paramType = "query", type = "string")
 	public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, @PageableDefault Pageable pageable) {
 		pageable = traduzirPageable(pageable);
 
@@ -67,6 +70,7 @@ public class PedidoController {
 	}
 
 	@GetMapping("/{codigoPedido}")
+	@ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula", name = "campos", paramType = "query", type = "string")
 	public PedidoModel buscar(@PathVariable String codigoPedido) {
 		Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
 
