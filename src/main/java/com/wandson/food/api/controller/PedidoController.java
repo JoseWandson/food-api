@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +26,7 @@ import com.wandson.food.api.assembler.PedidoResumoModelAssembler;
 import com.wandson.food.api.model.PedidoModel;
 import com.wandson.food.api.model.PedidoResumoModel;
 import com.wandson.food.api.model.input.PedidoInput;
+import com.wandson.food.api.openapi.controller.PedidoControllerOpenApi;
 import com.wandson.food.core.data.PageableTranslator;
 import com.wandson.food.domain.exception.EntidadeNaoEncontradaException;
 import com.wandson.food.domain.exception.NegocioException;
@@ -35,11 +37,9 @@ import com.wandson.food.domain.repository.PedidoRepository;
 import com.wandson.food.domain.service.EmissaoPedidoService;
 import com.wandson.food.infrastructure.repository.spec.PedidoSpecs;
 
-import io.swagger.annotations.ApiImplicitParam;
-
 @RestController
-@RequestMapping(value = "/pedidos")
-public class PedidoController {
+@RequestMapping(path = "/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)
+public class PedidoController implements PedidoControllerOpenApi {
 
 	@Autowired
 	private PedidoRepository pedidoRepository;
@@ -57,7 +57,6 @@ public class PedidoController {
 	private PedidoInputDisassembler pedidoInputDisassembler;
 
 	@GetMapping
-	@ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula", name = "campos", paramType = "query", type = "string")
 	public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, @PageableDefault Pageable pageable) {
 		pageable = traduzirPageable(pageable);
 
@@ -70,7 +69,6 @@ public class PedidoController {
 	}
 
 	@GetMapping("/{codigoPedido}")
-	@ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula", name = "campos", paramType = "query", type = "string")
 	public PedidoModel buscar(@PathVariable String codigoPedido) {
 		Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
 

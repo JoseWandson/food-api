@@ -18,7 +18,7 @@ import com.wandson.food.domain.model.Usuario;
 import com.wandson.food.domain.service.CadastroUsuarioService;
 
 @RestController
-@RequestMapping(value = "/usuarios/{usuarioId}/grupos")
+@RequestMapping("/usuarios/{usuarioId}/grupos")
 public class UsuarioGrupoController {
 
 	@Autowired

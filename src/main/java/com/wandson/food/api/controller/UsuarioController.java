@@ -26,7 +26,7 @@ import com.wandson.food.domain.repository.UsuarioRepository;
 import com.wandson.food.domain.service.CadastroUsuarioService;
 
 @RestController
-@RequestMapping(value = "/usuarios")
+@RequestMapping("/usuarios")
 public class UsuarioController {
 
 	@Autowired

@@ -18,7 +18,7 @@ import com.wandson.food.domain.model.Grupo;
 import com.wandson.food.domain.service.CadastroGrupoService;
 
 @RestController
-@RequestMapping(value = "/grupos/{grupoId}/permissoes")
+@RequestMapping("/grupos/{grupoId}/permissoes")
 public class GrupoPermissaoController {
 
 	@Autowired

@@ -18,7 +18,7 @@ import com.wandson.food.domain.model.Restaurante;
 import com.wandson.food.domain.service.CadastroRestauranteService;
 
 @RestController
-@RequestMapping(value = "/restaurantes/{restauranteId}/responsaveis")
+@RequestMapping("/restaurantes/{restauranteId}/responsaveis")
 public class RestauranteUsuarioResponsavelController {
 
 	@Autowired
