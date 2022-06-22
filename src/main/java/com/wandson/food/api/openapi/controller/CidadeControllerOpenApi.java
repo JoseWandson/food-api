@@ -2,42 +2,43 @@ package com.wandson.food.api.openapi.controller;
 
 import java.util.List;
 
-import org.springframework.http.MediaType;
-
 import com.wandson.food.api.exceptionhandler.Problem;
 import com.wandson.food.api.model.CidadeModel;
 import com.wandson.food.api.model.input.CidadeInput;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Api(tags = "Cidades")
+@Tag(name = "Cidades", description = "Gerencia as cidades")
 public interface CidadeControllerOpenApi {
 
-	@ApiOperation("Lista as cidades")
+	@Operation(summary = "Lista as cidades")
 	List<CidadeModel> listar();
 
-	@ApiOperation("Busca uma cidade por ID")
-	@ApiResponse(responseCode = "400", description = "ID da cidade inválido", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
-	@ApiResponse(responseCode = "404", description = "Cidade não encontrada", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
-	CidadeModel buscar(@ApiParam("ID de uma cidade") Long cidadeId);
+	@Operation(summary = "Busca uma cidade por ID")
+	@ApiResponse(responseCode = "200")
+	@ApiResponse(responseCode = "400", description = "ID da cidade inválido", content = @Content(schema = @Schema(implementation = Problem.class)))
+	@ApiResponse(responseCode = "404", description = "Cidade não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
+	CidadeModel buscar(@Parameter(description = "ID de uma cidade", example = "1") Long cidadeId);
 
-	@ApiOperation("Cadastra uma cidade")
+	@Operation(summary = "Cadastra uma cidade")
 	@ApiResponse(responseCode = "201", description = "Cidade cadastrada")
-	CidadeModel adicionar(CidadeInput cidadeInput);
+	CidadeModel adicionar(@RequestBody(description = "Representação de uma nova cidade") CidadeInput cidadeInput);
 
-	@ApiOperation("Atualiza uma cidade por ID")
+	@Operation(summary = "Atualiza uma cidade por ID")
 	@ApiResponse(responseCode = "200", description = "Cidade atualizada")
-	@ApiResponse(responseCode = "404", description = "Cidade não encontrada", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
-	CidadeModel atualizar(@ApiParam(value = "ID de uma cidade") Long cidadeId, CidadeInput cidadeInput);
+	@ApiResponse(responseCode = "404", description = "Cidade não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
+	CidadeModel atualizar(@Parameter(description = "ID de uma cidade", example = "1") Long cidadeId,
+			@RequestBody(description = "Representação de uma cidade com os novos dados") CidadeInput cidadeInput);
 
-	@ApiOperation("Exclui uma cidade por ID")
+	@Operation(summary = "Exclui uma cidade por ID")
 	@ApiResponse(responseCode = "204", description = "Cidade excluída")
-	@ApiResponse(responseCode = "404", description = "Cidade não encontrada", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
-	void remover(@ApiParam(value = "ID de uma cidade") Long cidadeId);
+	@ApiResponse(responseCode = "404", description = "Cidade não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
+	void remover(@Parameter(description = "ID de uma cidade", example = "1") Long cidadeId);
 
 }

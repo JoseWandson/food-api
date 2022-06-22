@@ -1,6 +1,6 @@
 package com.wandson.food.api.model;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,10 +8,10 @@ import lombok.Setter;
 @Setter
 public class CidadeModel {
 
-	@ApiModelProperty(example = "1")
+	@Schema(example = "1")
 	private Long id;
 
-	@ApiModelProperty(example = "João Pessoa")
+	@Schema(example = "João Pessoa")
 	private String nome;
 	private EstadoModel estado;
 

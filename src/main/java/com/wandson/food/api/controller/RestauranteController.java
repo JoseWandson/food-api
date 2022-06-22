@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
@@ -34,6 +35,7 @@ import com.wandson.food.api.assembler.RestauranteModelAssembler;
 import com.wandson.food.api.model.RestauranteModel;
 import com.wandson.food.api.model.input.RestauranteInput;
 import com.wandson.food.api.model.view.RestauranteView;
+import com.wandson.food.api.openapi.model.RestauranteBasicoModelOpenApi;
 import com.wandson.food.core.validation.ValidacaoException;
 import com.wandson.food.domain.exception.CidadeNaoEncontradaException;
 import com.wandson.food.domain.exception.CozinhaNaoEncontradaException;
@@ -42,6 +44,14 @@ import com.wandson.food.domain.exception.RestauranteNaoEncontradoException;
 import com.wandson.food.domain.model.Restaurante;
 import com.wandson.food.domain.repository.RestauranteRepository;
 import com.wandson.food.domain.service.CadastroRestauranteService;
+
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -67,10 +77,14 @@ public class RestauranteController {
 
 	@GetMapping
 	@JsonView(RestauranteView.Resumo.class)
+	@Operation(summary = "Lista restaurantes", ignoreJsonView = true)
+	@Parameter(description = "Nome da projeção de pedidos", name = "projecao", in = ParameterIn.QUERY, schema = @Schema(type = "string", allowableValues = "apenas-nome"))
+	@ApiResponse(responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = RestauranteBasicoModelOpenApi.class)))
 	public List<RestauranteModel> listar() {
 		return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
 	}
 
+	@Hidden
 	@JsonView(RestauranteView.ApenasNome.class)
 	@GetMapping(params = "projecao=apenas-nome")
 	public List<RestauranteModel> listarApenasNomes() {

@@ -2,35 +2,39 @@ package com.wandson.food.api.openapi.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
 
 import com.wandson.food.api.exceptionhandler.Problem;
 import com.wandson.food.api.model.PedidoModel;
 import com.wandson.food.api.model.PedidoResumoModel;
 import com.wandson.food.api.model.input.PedidoInput;
+import com.wandson.food.api.openapi.model.PedidosResumoModelOpenApi;
 import com.wandson.food.domain.filter.PedidoFilter;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Api(tags = "Pedidos")
+@Tag(name = "Pedidos", description = "Gerencia os pedidos")
 public interface PedidoControllerOpenApi {
 
-	@ApiOperation("Pesquisa os pedidos")
-	@ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula", name = "campos", paramType = "query", type = "string", dataTypeClass = String.class)
+	@Operation(summary = "Pesquisa os pedidos")
+	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = PedidosResumoModelOpenApi.class)))
+	@Parameter(description = "Nomes das propriedades para filtrar na resposta, separados por vírgula", name = "campos", in = ParameterIn.QUERY, schema = @Schema(type = "string"))
 	Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, Pageable pageable);
 
-	@ApiOperation("Registra um pedido")
+	@Operation(summary = "Registra um pedido")
 	@ApiResponse(responseCode = "201", description = "Pedido registrado")
-	public PedidoModel adicionar(PedidoInput pedidoInput);
+	public PedidoModel adicionar(@RequestBody(description = "Representação de um novo pedido") PedidoInput pedidoInput);
 
-	@ApiOperation("Busca um pedido por código")
-	@ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula", name = "campos", paramType = "query", type = "string", dataTypeClass = String.class)
-	@ApiResponse(responseCode = "404", description = "Pedido não encontrado", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
-	PedidoModel buscar(@ApiParam(value = "Código de um pedido") String codigoPedido);
+	@Operation(summary = "Busca um pedido por código")
+	@Parameter(description = "Nomes das propriedades para filtrar na resposta, separados por vírgula", name = "campos", in = ParameterIn.QUERY, schema = @Schema(type = "string"))
+	@ApiResponse(responseCode = "200")
+	@ApiResponse(responseCode = "404", description = "Pedido não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
+	PedidoModel buscar(
+			@Parameter(description = "Código de um pedido", example = "f9981ca4-5a5e-4da3-af04-933861df3e55") String codigoPedido);
 }

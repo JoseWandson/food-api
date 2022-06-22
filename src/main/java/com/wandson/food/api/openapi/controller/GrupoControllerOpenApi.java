@@ -2,42 +2,43 @@ package com.wandson.food.api.openapi.controller;
 
 import java.util.List;
 
-import org.springframework.http.MediaType;
-
 import com.wandson.food.api.exceptionhandler.Problem;
 import com.wandson.food.api.model.GrupoModel;
 import com.wandson.food.api.model.input.GrupoInput;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Api(tags = "Grupos")
+@Tag(name = "Grupos", description = "Gerencia os grupos de usuários")
 public interface GrupoControllerOpenApi {
 
-	@ApiOperation("Lista os grupos")
+	@Operation(summary = "Lista os grupos")
 	List<GrupoModel> listar();
 
-	@ApiOperation("Busca um grupo por ID")
-	@ApiResponse(responseCode = "400", description = "ID do grupo inválido", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
-	@ApiResponse(responseCode = "404", description = "Grupo não encontrado", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
-	GrupoModel buscar(@ApiParam("ID de um grupo") Long grupoId);
+	@Operation(summary = "Busca um grupo por ID")
+	@ApiResponse(responseCode = "200")
+	@ApiResponse(responseCode = "400", description = "ID do grupo inválido", content = @Content(schema = @Schema(implementation = Problem.class)))
+	@ApiResponse(responseCode = "404", description = "Grupo não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
+	GrupoModel buscar(@Parameter(description = "ID de um grupo", example = "1") Long grupoId);
 
-	@ApiOperation("Cadastra um grupo")
+	@Operation(summary = "Cadastra um grupo")
 	@ApiResponse(responseCode = "201", description = "Grupo cadastrado")
-	GrupoModel adicionar(GrupoInput grupoInput);
+	GrupoModel adicionar(@RequestBody(description = "Representação de um novo grupo") GrupoInput grupoInput);
 
-	@ApiOperation("Atualiza um grupo por ID")
+	@Operation(summary = "Atualiza um grupo por ID")
 	@ApiResponse(responseCode = "200", description = "Grupo atualizado")
-	@ApiResponse(responseCode = "404", description = "Grupo não encontrado", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
-	GrupoModel atualizar(@ApiParam("ID de um grupo") Long grupoId, GrupoInput grupoInput);
+	@ApiResponse(responseCode = "404", description = "Grupo não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
+	GrupoModel atualizar(@Parameter(description = "ID de um grupo", example = "1") Long grupoId,
+			@RequestBody(description = "Representação de um grupo com os novos dados") GrupoInput grupoInput);
 
-	@ApiOperation("Exclui um grupo por ID")
+	@Operation(summary = "Exclui um grupo por ID")
 	@ApiResponse(responseCode = "204", description = "Grupo excluído")
-	@ApiResponse(responseCode = "404", description = "Grupo não encontrado", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
-	void remover(@ApiParam("ID de um grupo") Long grupoId);
+	@ApiResponse(responseCode = "404", description = "Grupo não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
+	void remover(@Parameter(description = "ID de um grupo", example = "1") Long grupoId);
 
 }
