@@ -52,12 +52,17 @@ public class SpringDocConfig {
 
 			Operation operationPost = pathItem.getPost();
 			if (Objects.nonNull(operationPost)) {
-				globalPostPutApiResponses(operationPost);
+				globalPostPutPatchApiResponses(operationPost);
 			}
 
 			Operation operationPut = pathItem.getPut();
 			if (Objects.nonNull(operationPut)) {
-				globalPostPutApiResponses(operationPut);
+				globalPostPutPatchApiResponses(operationPut);
+			}
+
+			Operation operationPatch = pathItem.getPatch();
+			if (Objects.nonNull(operationPatch)) {
+				globalPostPutPatchApiResponses(operationPatch);
 			}
 
 			Operation operationtDelete = pathItem.getDelete();
@@ -70,7 +75,7 @@ public class SpringDocConfig {
 		});
 	}
 
-	private void globalPostPutApiResponses(Operation operation) {
+	private void globalPostPutPatchApiResponses(Operation operation) {
 		ApiResponses apiResponses = operation.getResponses();
 		apiResponses.addApiResponse(String.valueOf(HttpStatus.BAD_REQUEST.value()), apiResponseBadRequest());
 		apiResponses.addApiResponse(String.valueOf(HttpStatus.NOT_ACCEPTABLE.value()), apiResponseNotAcceptable());

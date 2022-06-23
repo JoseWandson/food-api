@@ -35,7 +35,7 @@ import com.wandson.food.api.assembler.RestauranteModelAssembler;
 import com.wandson.food.api.model.RestauranteModel;
 import com.wandson.food.api.model.input.RestauranteInput;
 import com.wandson.food.api.model.view.RestauranteView;
-import com.wandson.food.api.openapi.model.RestauranteBasicoModelOpenApi;
+import com.wandson.food.api.openapi.controller.RestauranteControllerOpenApi;
 import com.wandson.food.core.validation.ValidacaoException;
 import com.wandson.food.domain.exception.CidadeNaoEncontradaException;
 import com.wandson.food.domain.exception.CozinhaNaoEncontradaException;
@@ -45,17 +45,9 @@ import com.wandson.food.domain.model.Restaurante;
 import com.wandson.food.domain.repository.RestauranteRepository;
 import com.wandson.food.domain.service.CadastroRestauranteService;
 
-import io.swagger.v3.oas.annotations.Hidden;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-
 @RestController
-@RequestMapping("/restaurantes")
-public class RestauranteController {
+@RequestMapping(path = "/restaurantes", produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestauranteController implements RestauranteControllerOpenApi {
 
 	@Autowired
 	private CadastroRestauranteService cadastroRestaurante;
@@ -77,14 +69,10 @@ public class RestauranteController {
 
 	@GetMapping
 	@JsonView(RestauranteView.Resumo.class)
-	@Operation(summary = "Lista restaurantes", ignoreJsonView = true)
-	@Parameter(description = "Nome da projeção de pedidos", name = "projecao", in = ParameterIn.QUERY, schema = @Schema(type = "string", allowableValues = "apenas-nome"))
-	@ApiResponse(responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = RestauranteBasicoModelOpenApi.class)))
 	public List<RestauranteModel> listar() {
 		return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
 	}
 
-	@Hidden
 	@JsonView(RestauranteView.ApenasNome.class)
 	@GetMapping(params = "projecao=apenas-nome")
 	public List<RestauranteModel> listarApenasNomes() {
