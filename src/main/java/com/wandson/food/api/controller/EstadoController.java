@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,13 +21,14 @@ import com.wandson.food.api.assembler.EstadoInputDisassembler;
 import com.wandson.food.api.assembler.EstadoModelAssembler;
 import com.wandson.food.api.model.EstadoModel;
 import com.wandson.food.api.model.input.EstadoInput;
+import com.wandson.food.api.openapi.controller.EstadoControllerOpenApi;
 import com.wandson.food.domain.model.Estado;
 import com.wandson.food.domain.repository.EstadoRepository;
 import com.wandson.food.domain.service.CadastroEstadoService;
 
 @RestController
-@RequestMapping("/estados")
-public class EstadoController {
+@RequestMapping(path = "/estados", produces = MediaType.APPLICATION_JSON_VALUE)
+public class EstadoController implements EstadoControllerOpenApi {
 
 	@Autowired
 	private CadastroEstadoService cadastroEstado;

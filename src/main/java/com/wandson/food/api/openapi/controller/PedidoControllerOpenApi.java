@@ -29,7 +29,7 @@ public interface PedidoControllerOpenApi {
 
 	@Operation(summary = "Registra um pedido")
 	@ApiResponse(responseCode = "201", description = "Pedido registrado")
-	public PedidoModel adicionar(@RequestBody(description = "Representação de um novo pedido") PedidoInput pedidoInput);
+	PedidoModel adicionar(@RequestBody(description = "Representação de um novo pedido") PedidoInput pedidoInput);
 
 	@Operation(summary = "Busca um pedido por código")
 	@Parameter(description = "Nomes das propriedades para filtrar na resposta, separados por vírgula", name = "campos", in = ParameterIn.QUERY, schema = @Schema(type = "string"))

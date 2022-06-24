@@ -21,27 +21,26 @@ public interface CozinhaControllerOpenApi {
 
 	@Operation(summary = "Lista as cozinhas com paginação")
 	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = CozinhasModelOpenApi.class)))
-	public Page<CozinhaModel> listar(Pageable pageable);
+	Page<CozinhaModel> listar(Pageable pageable);
 
 	@Operation(summary = "Busca uma cozinha por ID")
 	@ApiResponse(responseCode = "200")
 	@ApiResponse(responseCode = "400", description = "ID da cozinha inválido", content = @Content(schema = @Schema(implementation = Problem.class)))
 	@ApiResponse(responseCode = "404", description = "Cozinha não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
-	public CozinhaModel buscar(@Parameter(description = "ID de uma cozinha", example = "1") Long cozinhaId);
+	CozinhaModel buscar(@Parameter(description = "ID de uma cozinha", example = "1") Long cozinhaId);
 
 	@Operation(summary = "Cadastra uma cozinha")
 	@ApiResponse(responseCode = "201", description = "Cozinha cadastrada")
-	public CozinhaModel adicionar(
-			@RequestBody(description = "Representação de uma nova cozinha") CozinhaInput cozinhaInput);
+	CozinhaModel adicionar(@RequestBody(description = "Representação de uma nova cozinha") CozinhaInput cozinhaInput);
 
 	@Operation(summary = "Atualiza uma cozinha por ID")
 	@ApiResponse(responseCode = "200", description = "Cozinha atualizada")
 	@ApiResponse(responseCode = "404", description = "Cozinha não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
-	public CozinhaModel atualizar(@Parameter(description = "ID de uma cozinha", example = "1") Long cozinhaId,
+	CozinhaModel atualizar(@Parameter(description = "ID de uma cozinha", example = "1") Long cozinhaId,
 			@RequestBody(description = "Representação de uma cozinha com os novos dados") CozinhaInput cozinhaInput);
 
 	@Operation(summary = "Exclui uma cozinha por ID")
 	@ApiResponse(responseCode = "204", description = "Cozinha excluída")
 	@ApiResponse(responseCode = "404", description = "Cozinha não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
-	public void remover(@Parameter(description = "ID de uma cozinha", example = "1") Long cozinhaId);
+	void remover(@Parameter(description = "ID de uma cozinha", example = "1") Long cozinhaId);
 }
