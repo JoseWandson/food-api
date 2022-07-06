@@ -18,7 +18,7 @@ public class PageableModelOpenApi {
 	@Schema(description = "Quantidade de elementos por página", example = "10")
 	private int size;
 
-	@ArraySchema(schema = @Schema(description = "Nome da propriedade para ordenação", example = "nome,asc"))
+	@ArraySchema(arraySchema = @Schema(description = "Nome da propriedade para ordenação", example = "nome,asc"))
 	private List<String> sort;
 
 }

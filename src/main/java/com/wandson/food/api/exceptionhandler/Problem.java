@@ -35,7 +35,7 @@ public class Problem {
 	@Schema(example = "2022-06-13T18:15:27.9899105Z")
 	private OffsetDateTime timestamp;
 
-	@ArraySchema(schema = @Schema(description = "Lista de objetos ou campos que geraram o erro (opcional)"))
+	@ArraySchema(arraySchema = @Schema(description = "Lista de objetos ou campos que geraram o erro (opcional)"))
 	private List<Object> objects;
 
 	@Getter
