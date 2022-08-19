@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -54,7 +55,13 @@ public class CidadeController implements CidadeControllerOpenApi {
 	@GetMapping("/{cidadeId}")
 	public CidadeModel buscar(@PathVariable Long cidadeId) {
 		Cidade cidade = cadastroCidade.buscarOuFalhar(cidadeId);
-		return cidadeModelAssembler.toModel(cidade);
+
+		CidadeModel cidadeModel = cidadeModelAssembler.toModel(cidade);
+		cidadeModel.add(Link.of("http://api.wandfood.local:8080/cidades/1"));
+		cidadeModel.add(Link.of("http://api.wandfood.local:8080/cidades", "cidades"));
+		cidadeModel.getEstado().add(Link.of("http://api.wandfood.local:8080/estados/1"));
+
+		return cidadeModel;
 	}
 
 	@PostMapping
