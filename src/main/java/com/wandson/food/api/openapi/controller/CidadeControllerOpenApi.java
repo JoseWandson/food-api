@@ -1,6 +1,6 @@
 package com.wandson.food.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.wandson.food.api.exceptionhandler.Problem;
 import com.wandson.food.api.model.CidadeModel;
@@ -18,7 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface CidadeControllerOpenApi {
 
 	@Operation(summary = "Lista as cidades")
-	List<CidadeModel> listar();
+	CollectionModel<CidadeModel> listar();
 
 	@Operation(summary = "Busca uma cidade por ID")
 	@ApiResponse(responseCode = "200")
