@@ -1,8 +1,5 @@
 package com.wandson.food.api.controller;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import java.util.List;
 
 import javax.validation.Valid;
@@ -49,38 +46,23 @@ public class CidadeController implements CidadeControllerOpenApi {
 	@Autowired
 	private CidadeInputDisassembler cidadeInputDisassembler;
 
+	@Override
 	@GetMapping
 	public CollectionModel<CidadeModel> listar() {
 		List<Cidade> todasCidades = cidadeRepository.findAll();
 
-		List<CidadeModel> cidadesModel = cidadeModelAssembler.toCollectionModel(todasCidades);
-		cidadesModel.forEach(cidadeModel -> {
-			cidadeModel.add(linkTo(methodOn(CidadeController.class).buscar(cidadeModel.getId())).withSelfRel());
-			cidadeModel.add(linkTo(methodOn(CidadeController.class).listar()).withRel("cidades"));
-			cidadeModel.getEstado().add(
-					linkTo(methodOn(EstadoController.class).buscar(cidadeModel.getEstado().getId())).withSelfRel());
-		});
-
-		CollectionModel<CidadeModel> cidadesCollectionModel = CollectionModel.of(cidadesModel);
-		cidadesCollectionModel.add(linkTo(CidadeController.class).withSelfRel());
-
-		return cidadesCollectionModel;
+		return cidadeModelAssembler.toCollectionModel(todasCidades);
 	}
 
+	@Override
 	@GetMapping("/{cidadeId}")
 	public CidadeModel buscar(@PathVariable Long cidadeId) {
 		Cidade cidade = cadastroCidade.buscarOuFalhar(cidadeId);
 
-		CidadeModel cidadeModel = cidadeModelAssembler.toModel(cidade);
-
-		cidadeModel.add(linkTo(methodOn(CidadeController.class).buscar(cidadeId)).withSelfRel());
-		cidadeModel.add(linkTo(methodOn(CidadeController.class).listar()).withRel("cidades"));
-		cidadeModel.getEstado()
-				.add(linkTo(methodOn(EstadoController.class).buscar(cidadeModel.getEstado().getId())).withSelfRel());
-
-		return cidadeModel;
+		return cidadeModelAssembler.toModel(cidade);
 	}
 
+	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public CidadeModel adicionar(@RequestBody @Valid CidadeInput cidadeInput) {
@@ -98,6 +80,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 		}
 	}
 
+	@Override
 	@PutMapping("/{cidadeId}")
 	public CidadeModel atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeInput cidadeInput) {
 		try {
@@ -112,6 +95,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 		}
 	}
 
+	@Override
 	@DeleteMapping("/{cidadeId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long cidadeId) {
