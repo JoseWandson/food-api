@@ -1,6 +1,6 @@
 package com.wandson.food.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.wandson.food.api.exceptionhandler.Problem;
 import com.wandson.food.api.model.UsuarioModel;
@@ -18,7 +18,8 @@ public interface RestauranteUsuarioResponsavelControllerOpenApi {
 	@Operation(summary = "Lista os usuários responsáveis associados a restaurante")
 	@ApiResponse(responseCode = "200")
 	@ApiResponse(responseCode = "404", description = "Restaurante não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
-	List<UsuarioModel> listar(@Parameter(description = "ID do restaurante", example = "1") Long restauranteId);
+	CollectionModel<UsuarioModel> listar(
+			@Parameter(description = "ID do restaurante", example = "1") Long restauranteId);
 
 	@Operation(summary = "Desassociação de restaurante com usuário responsável")
 	@ApiResponse(responseCode = "204", description = "Desassociação realizada com sucesso")

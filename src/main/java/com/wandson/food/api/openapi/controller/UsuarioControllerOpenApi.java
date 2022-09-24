@@ -1,6 +1,6 @@
 package com.wandson.food.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.wandson.food.api.exceptionhandler.Problem;
 import com.wandson.food.api.model.UsuarioModel;
@@ -20,7 +20,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface UsuarioControllerOpenApi {
 
 	@Operation(summary = "Lista os usuários")
-	List<UsuarioModel> listar();
+	CollectionModel<UsuarioModel> listar();
 
 	@Operation(summary = "Busca um usuário por ID")
 	@ApiResponse(responseCode = "200")
