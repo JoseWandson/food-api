@@ -1,7 +1,7 @@
 package com.wandson.food.api.openapi.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 
 import com.wandson.food.api.exceptionhandler.Problem;
 import com.wandson.food.api.model.CozinhaModel;
@@ -21,7 +21,7 @@ public interface CozinhaControllerOpenApi {
 
 	@Operation(summary = "Lista as cozinhas com paginação")
 	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = CozinhasModelOpenApi.class)))
-	Page<CozinhaModel> listar(Pageable pageable);
+	PagedModel<CozinhaModel> listar(Pageable pageable);
 
 	@Operation(summary = "Busca uma cozinha por ID")
 	@ApiResponse(responseCode = "200")
