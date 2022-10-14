@@ -1,26 +1,41 @@
 package com.wandson.food.api.assembler;
 
-import java.util.List;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import com.wandson.food.api.controller.PedidoController;
+import com.wandson.food.api.controller.RestauranteController;
+import com.wandson.food.api.controller.UsuarioController;
 import com.wandson.food.api.model.PedidoResumoModel;
 import com.wandson.food.domain.model.Pedido;
 
 @Component
-public class PedidoResumoModelAssembler {
+public class PedidoResumoModelAssembler extends RepresentationModelAssemblerSupport<Pedido, PedidoResumoModel> {
 
 	@Autowired
 	private ModelMapper modelMapper;
 
-	public List<PedidoResumoModel> toCollectionModel(List<Pedido> pedidos) {
-		return pedidos.stream().map(this::toModel).toList();
+	public PedidoResumoModelAssembler() {
+		super(PedidoController.class, PedidoResumoModel.class);
 	}
 
-	private PedidoResumoModel toModel(Pedido pedido) {
-		return modelMapper.map(pedido, PedidoResumoModel.class);
+	@Override
+	public PedidoResumoModel toModel(Pedido pedido) {
+		PedidoResumoModel pedidoResumoModel = createModelWithId(pedido.getCodigo(), pedido);
+		modelMapper.map(pedido, pedidoResumoModel);
+
+		pedidoResumoModel.add(linkTo(PedidoController.class).withRel("pedidos"));
+		pedidoResumoModel.getRestaurante().add(
+				linkTo(methodOn(RestauranteController.class).buscar(pedido.getRestaurante().getId())).withSelfRel());
+		pedidoResumoModel.getCliente()
+				.add(linkTo(methodOn(UsuarioController.class).buscar(pedido.getCliente().getId())).withSelfRel());
+
+		return pedidoResumoModel;
 	}
 
 }

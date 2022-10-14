@@ -2,13 +2,17 @@ package com.wandson.food.api.model;
 
 import java.math.BigDecimal;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ItemPedidoModel {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+public class ItemPedidoModel extends RepresentationModel<ItemPedidoModel> {
 
 	@Schema(example = "1")
 	private Long produtoId;

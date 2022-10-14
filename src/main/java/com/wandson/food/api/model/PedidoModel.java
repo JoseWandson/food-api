@@ -4,14 +4,21 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class PedidoModel {
+@Relation(collectionRelation = "pedidos")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+public class PedidoModel extends RepresentationModel<PedidoModel> {
 
+	@EqualsAndHashCode.Include
 	@Schema(example = "f9981ca4-5a5e-4da3-af04-933861df3e55")
 	private String codigo;
 

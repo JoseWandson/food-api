@@ -1,7 +1,7 @@
 package com.wandson.food.api.openapi.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 
 import com.wandson.food.api.exceptionhandler.Problem;
 import com.wandson.food.api.model.PedidoModel;
@@ -25,7 +25,7 @@ public interface PedidoControllerOpenApi {
 	@Operation(summary = "Pesquisa os pedidos")
 	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = PedidosResumoModelOpenApi.class)))
 	@Parameter(description = "Nomes das propriedades para filtrar na resposta, separados por vírgula", name = "campos", in = ParameterIn.QUERY, schema = @Schema(type = "string"))
-	Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, Pageable pageable);
+	PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro, Pageable pageable);
 
 	@Operation(summary = "Registra um pedido")
 	@ApiResponse(responseCode = "201", description = "Pedido registrado")
