@@ -27,6 +27,7 @@ import com.wandson.food.api.model.PedidoModel;
 import com.wandson.food.api.model.PedidoResumoModel;
 import com.wandson.food.api.model.input.PedidoInput;
 import com.wandson.food.api.openapi.controller.PedidoControllerOpenApi;
+import com.wandson.food.core.data.PageWrapper;
 import com.wandson.food.core.data.PageableTranslator;
 import com.wandson.food.domain.exception.EntidadeNaoEncontradaException;
 import com.wandson.food.domain.exception.NegocioException;
@@ -62,9 +63,10 @@ public class PedidoController implements PedidoControllerOpenApi {
 	@Override
 	@GetMapping
 	public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro, @PageableDefault Pageable pageable) {
-		pageable = traduzirPageable(pageable);
+		Pageable pageableTraduzido = traduzirPageable(pageable);
 
-		Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
+		Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageableTraduzido);
+		pedidosPage = new PageWrapper<>(pedidosPage, pageable);
 
 		return pagedResourcesAssembler.toModel(pedidosPage, pedidoResumoModelAssembler);
 	}
