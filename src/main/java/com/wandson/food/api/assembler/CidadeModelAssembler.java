@@ -1,7 +1,6 @@
 package com.wandson.food.api.assembler;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +8,8 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import com.wandson.food.api.Links;
 import com.wandson.food.api.controller.CidadeController;
-import com.wandson.food.api.controller.EstadoController;
 import com.wandson.food.api.model.CidadeModel;
 import com.wandson.food.domain.model.Cidade;
 
@@ -19,6 +18,9 @@ public class CidadeModelAssembler extends RepresentationModelAssemblerSupport<Ci
 
 	@Autowired
 	private ModelMapper modelMapper;
+
+	@Autowired
+	private Links links;
 
 	public CidadeModelAssembler() {
 		super(CidadeController.class, CidadeModel.class);
@@ -30,9 +32,8 @@ public class CidadeModelAssembler extends RepresentationModelAssemblerSupport<Ci
 
 		modelMapper.map(cidade, cidadeModel);
 
-		cidadeModel.add(linkTo(CidadeController.class).withRel("cidades"));
-		cidadeModel.getEstado()
-				.add(linkTo(methodOn(EstadoController.class).buscar(cidadeModel.getEstado().getId())).withSelfRel());
+		cidadeModel.add(links.linkToCidades("cidades"));
+		cidadeModel.getEstado().add(links.linkToEstado(cidadeModel.getEstado().getId()));
 
 		return cidadeModel;
 	}
