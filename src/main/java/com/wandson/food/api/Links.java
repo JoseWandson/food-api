@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.wandson.food.api.controller.CidadeController;
 import com.wandson.food.api.controller.CozinhaController;
 import com.wandson.food.api.controller.EstadoController;
+import com.wandson.food.api.controller.FluxoPedidoController;
 import com.wandson.food.api.controller.FormaPagamentoController;
 import com.wandson.food.api.controller.PedidoController;
 import com.wandson.food.api.controller.RestauranteController;
@@ -87,6 +88,18 @@ public class Links {
 
 	public Link linkToCozinhas(String rel) {
 		return linkTo(CozinhaController.class).withRel(rel);
+	}
+
+	public Link linkToConfirmacaoPedido(String codigoPedido, String rel) {
+		return linkTo(methodOn(FluxoPedidoController.class).confirmar(codigoPedido)).withRel(rel);
+	}
+
+	public Link linkToEntregaPedido(String codigoPedido, String rel) {
+		return linkTo(methodOn(FluxoPedidoController.class).entregar(codigoPedido)).withRel(rel);
+	}
+
+	public Link linkToCancelamentoPedido(String codigoPedido, String rel) {
+		return linkTo(methodOn(FluxoPedidoController.class).cancelar(codigoPedido)).withRel(rel);
 	}
 
 	private Link linkToRestaurante(Long restauranteId, String rel) {
