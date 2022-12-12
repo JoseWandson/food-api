@@ -3,7 +3,7 @@ package com.wandson.food.api.openapi.controller;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import com.wandson.food.api.exceptionhandler.Problem;
 import com.wandson.food.api.model.RestauranteModel;

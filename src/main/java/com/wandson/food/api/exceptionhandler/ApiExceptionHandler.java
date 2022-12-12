@@ -13,6 +13,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
@@ -94,9 +95,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
-			HttpStatus status, WebRequest request) {
+			HttpStatusCode statusCode, WebRequest request) {
+		HttpStatus status = (HttpStatus) statusCode;
+
 		if (Objects.isNull(body)) {
-			body = Problem.builder().title(status.getReasonPhrase()).status(status.value())
+			body = Problem.builder().title(status.getReasonPhrase()).status(statusCode.value())
 					.userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL).timestamp(OffsetDateTime.now()).build();
 		} else if (body instanceof String string) {
 			body = Problem.builder().title(string).status(status.value()).userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
@@ -107,7 +110,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		Throwable rootCause = ExceptionUtils.getRootCause(ex);
 		if (rootCause instanceof InvalidFormatException invalidFormatException) {
 			return handleInvalidFormat(invalidFormatException, headers, status, request);
@@ -125,7 +128,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
 	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,
-			HttpStatus status, WebRequest request) {
+			HttpStatusCode status, WebRequest request) {
 		if (ex instanceof MethodArgumentTypeMismatchException methodArgumentTypeMismatchException) {
 			return handleMethodArgumentTypeMismatch(methodArgumentTypeMismatchException, headers, status, request);
 		}
@@ -135,7 +138,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
 	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers,
-			HttpStatus status, WebRequest request) {
+			HttpStatusCode status, WebRequest request) {
 		var problemType = ProblemType.RECURSO_NAO_ENCONTRADO;
 		var detail = String.format("O recurso %s, que você tentou acessar, é inexistente.", ex.getRequestURL());
 		var problem = createProblemBuilder(status, problemType, detail).userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
@@ -145,29 +148,29 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		return handleValidationInternal(ex, ex.getBindingResult(), headers, status, request);
 	}
 
 	@Override
-	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status,
+	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatusCode status,
 			WebRequest request) {
 		return handleValidationInternal(ex, ex, headers, status, request);
 	}
 
 	@Override
 	protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		return ResponseEntity.status(status).headers(headers).build();
 	}
 
-	private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String detail) {
+	private Problem.ProblemBuilder createProblemBuilder(HttpStatusCode status, ProblemType problemType, String detail) {
 		return Problem.builder().status(status.value()).type(problemType.getUri()).title(problemType.getTitle())
 				.timestamp(OffsetDateTime.now()).detail(detail);
 	}
 
 	private ResponseEntity<Object> handleInvalidFormat(InvalidFormatException ex, HttpHeaders headers,
-			HttpStatus status, WebRequest request) {
+			HttpStatusCode status, WebRequest request) {
 		String path = joinPath(ex.getPath());
 		var problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
 		var detail = String.format(
@@ -179,7 +182,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	private ResponseEntity<Object> handlePropertyBinding(PropertyBindingException ex, HttpHeaders headers,
-			HttpStatus status, WebRequest request) {
+			HttpStatusCode status, WebRequest request) {
 		String path = joinPath(ex.getPath());
 		var problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
 		var detail = String
@@ -194,7 +197,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	private ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		var problemType = ProblemType.PARAMETRO_INVALIDO;
 		var detail = String.format(
 				"O parâmetro de URL '%s' recebeu o valor '%s', que é de um tipo inválido. Corrija e informe um valor compatível com o tipo %s.",
@@ -207,7 +210,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	private ResponseEntity<Object> handleValidationInternal(Exception ex, BindingResult bindingResult,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		var problemType = ProblemType.DADOS_INVALIDOS;
 		var detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
 

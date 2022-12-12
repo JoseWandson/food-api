@@ -70,7 +70,7 @@ class CadastroCozinhaIT {
 	@Test
 	void deveRetornarRespostaEStatusCorretos_QuandoConsultarCozinhaExistente() {
 		given().pathParam("cozinhaId", cozinhaAmericana.getId()).accept(ContentType.JSON).when().get("/{cozinhaId}")
-				.then().statusCode(HttpStatus.OK.value()).body("nome", equalTo(cozinhaAmericana.getNome()));
+				.then().statusCode(equalTo(HttpStatus.OK.value())).body("nome", equalTo(cozinhaAmericana.getNome()));
 	}
 
 	@Test

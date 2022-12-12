@@ -5,17 +5,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.Predicate;
-
 import org.springframework.stereotype.Repository;
 
 import com.wandson.food.domain.filter.VendaDiariaFilter;
 import com.wandson.food.domain.model.Pedido;
+import com.wandson.food.domain.model.Pedido_;
+import com.wandson.food.domain.model.Restaurante_;
 import com.wandson.food.domain.model.StatusPedido;
 import com.wandson.food.domain.model.dto.VendaDiaria;
 import com.wandson.food.domain.service.VendaQueryService;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.Predicate;
 
 @Repository
 public class VendaQueryServiceImpl implements VendaQueryService {
@@ -36,11 +38,12 @@ public class VendaQueryServiceImpl implements VendaQueryService {
 				builder.literal("+00:00"), builder.literal(timeOffset));
 		var functionDateDataCriacao = builder.function("date", Date.class, functionConvertTzDataCriacao);
 
-		var selection = builder.construct(VendaDiaria.class, functionDateDataCriacao, builder.count(root.get("id")),
-				builder.sum(root.get("valorTotal")));
+		var selection = builder.construct(VendaDiaria.class, functionDateDataCriacao,
+				builder.count(root.get(Pedido_.id)), builder.sum(root.get(Pedido_.valorTotal)));
 
 		if (Objects.nonNull(filtro.getRestauranteId())) {
-			predicates.add(builder.equal(root.get("restaurante"), filtro.getRestauranteId()));
+			predicates
+					.add(builder.equal(root.get(Pedido_.restaurante).get(Restaurante_.id), filtro.getRestauranteId()));
 		}
 
 		if (Objects.nonNull(filtro.getDataCriacaoInicio())) {
@@ -51,7 +54,7 @@ public class VendaQueryServiceImpl implements VendaQueryService {
 			predicates.add(builder.lessThanOrEqualTo(root.get(DATA_CRIACAO), filtro.getDataCriacaoFim()));
 		}
 
-		predicates.add(root.get("status").in(StatusPedido.CONFIRMADO, StatusPedido.ENTREGUE));
+		predicates.add(root.get(Pedido_.status).in(StatusPedido.CONFIRMADO, StatusPedido.ENTREGUE));
 
 		query.select(selection);
 		query.where(predicates.toArray(new Predicate[0]));

@@ -109,7 +109,7 @@ class CadastroRestauranteIT {
 	@Test
 	void deveRetornarRespostaEStatusCorretos_QuandoConsultarRestauranteExistente() {
 		given().pathParam("restauranteId", burgerTopRestaurante.getId()).accept(ContentType.JSON).when()
-				.get("/{restauranteId}").then().statusCode(HttpStatus.OK.value())
+				.get("/{restauranteId}").then().statusCode(equalTo(HttpStatus.OK.value()))
 				.body("nome", equalTo(burgerTopRestaurante.getNome()));
 	}
 

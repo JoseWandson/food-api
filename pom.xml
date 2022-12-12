@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.2</version>
+		<version>3.0.0</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -19,11 +19,11 @@
 
 	<properties>
 		<java.version>17</java.version>
-		<modelmapper.version>3.1.0</modelmapper.version>
+		<modelmapper.version>3.1.1</modelmapper.version>
 		<squiggly.version>1.3.18</squiggly.version>
 		<jasperreports.version>6.20.0</jasperreports.version>
-		<aws-java-sdk-s3.version>1.12.280</aws-java-sdk-s3.version>
-		<springdoc.version>1.6.9</springdoc.version>
+		<aws-java-sdk-s3.version>1.12.362</aws-java-sdk-s3.version>
+		<springdoc.version>1.6.13</springdoc.version>
 	</properties>
 
 	<dependencies>
@@ -76,15 +76,15 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-freemarker</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-hateoas</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 
@@ -104,21 +104,20 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.modelmapper</groupId>
-			<artifactId>modelmapper</artifactId>
-			<version>${modelmapper.version}</version>
-		</dependency>
-
-		<dependency>
 			<groupId>io.rest-assured</groupId>
 			<artifactId>rest-assured</artifactId>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>com.github.bohnman</groupId>
-			<artifactId>squiggly-filter-jackson</artifactId>
-			<version>${squiggly.version}</version>
+			<groupId>org.hibernate.orm</groupId>
+			<artifactId>hibernate-jpamodelgen</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>${modelmapper.version}</version>
 		</dependency>
 
 		<dependency>
