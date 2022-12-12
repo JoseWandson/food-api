@@ -6,6 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.domain.AbstractAggregateRoot;
+
+import com.wandson.food.domain.event.PedidoCanceladoEvent;
+import com.wandson.food.domain.event.PedidoConfirmadoEvent;
+import com.wandson.food.domain.exception.NegocioException;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -19,14 +26,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.domain.AbstractAggregateRoot;
-
-import com.wandson.food.domain.event.PedidoCanceladoEvent;
-import com.wandson.food.domain.event.PedidoConfirmadoEvent;
-import com.wandson.food.domain.exception.NegocioException;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -104,6 +103,18 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
 		dataCancelamento = OffsetDateTime.now();
 
 		registerEvent(new PedidoCanceladoEvent(this));
+	}
+
+	public boolean podeSerConfirmado() {
+		return status.podeAlterarPara(StatusPedido.CONFIRMADO);
+	}
+
+	public boolean podeSerEntregue() {
+		return status.podeAlterarPara(StatusPedido.ENTREGUE);
+	}
+
+	public boolean podeSerCancelado() {
+		return status.podeAlterarPara(StatusPedido.CANCELADO);
 	}
 
 	private void setStatus(StatusPedido status) {
