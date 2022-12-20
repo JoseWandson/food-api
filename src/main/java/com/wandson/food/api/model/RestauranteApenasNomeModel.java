@@ -10,15 +10,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Relation(collectionRelation = "cozinhas")
+@Relation(collectionRelation = "restaurantes")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
-public class CozinhaModel extends RepresentationModel<CozinhaModel> {
+public class RestauranteApenasNomeModel extends RepresentationModel<RestauranteApenasNomeModel> {
 
 	@Schema(example = "1")
 	@EqualsAndHashCode.Include
 	private Long id;
 
-	@Schema(example = "Brasileira")
+	@Schema(example = "Thai Gourmet")
 	private String nome;
 
 }

@@ -1,5 +1,7 @@
 package com.wandson.food.api.model;
 
+import java.math.BigDecimal;
+
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
@@ -12,7 +14,7 @@ import lombok.Setter;
 @Setter
 @Relation(collectionRelation = "restaurantes")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
-public class RestauranteResumoModel extends RepresentationModel<RestauranteResumoModel> {
+public class RestauranteBasicoModel extends RepresentationModel<RestauranteBasicoModel> {
 
 	@Schema(example = "1")
 	@EqualsAndHashCode.Include
@@ -21,4 +23,8 @@ public class RestauranteResumoModel extends RepresentationModel<RestauranteResum
 	@Schema(example = "Thai Gourmet")
 	private String nome;
 
+	@Schema(example = "12.00")
+	private BigDecimal taxaFrete;
+
+	private CozinhaModel cozinha;
 }

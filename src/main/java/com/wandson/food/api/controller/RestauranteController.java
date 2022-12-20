@@ -3,13 +3,12 @@ package com.wandson.food.api.controller;
 import java.util.List;
 import java.util.Map;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
-
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
@@ -26,15 +25,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wandson.food.api.assembler.RestauranteApenasNomeModelAssembler;
+import com.wandson.food.api.assembler.RestauranteBasicoModelAssembler;
 import com.wandson.food.api.assembler.RestauranteInputAssembler;
 import com.wandson.food.api.assembler.RestauranteInputDisassembler;
 import com.wandson.food.api.assembler.RestauranteModelAssembler;
+import com.wandson.food.api.model.RestauranteApenasNomeModel;
+import com.wandson.food.api.model.RestauranteBasicoModel;
 import com.wandson.food.api.model.RestauranteModel;
 import com.wandson.food.api.model.input.RestauranteInput;
-import com.wandson.food.api.model.view.RestauranteView;
 import com.wandson.food.api.openapi.controller.RestauranteControllerOpenApi;
 import com.wandson.food.core.validation.ValidacaoException;
 import com.wandson.food.domain.exception.CidadeNaoEncontradaException;
@@ -44,6 +45,9 @@ import com.wandson.food.domain.exception.RestauranteNaoEncontradoException;
 import com.wandson.food.domain.model.Restaurante;
 import com.wandson.food.domain.repository.RestauranteRepository;
 import com.wandson.food.domain.service.CadastroRestauranteService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/restaurantes", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -62,6 +66,12 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 	private RestauranteModelAssembler restauranteModelAssembler;
 
 	@Autowired
+	private RestauranteBasicoModelAssembler restauranteBasicoModelAssembler;
+
+	@Autowired
+	private RestauranteApenasNomeModelAssembler restauranteApenasNomeModelAssembler;
+
+	@Autowired
 	private RestauranteInputAssembler restauranteInputAssembler;
 
 	@Autowired
@@ -69,16 +79,14 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 
 	@Override
 	@GetMapping
-	@JsonView(RestauranteView.Resumo.class)
-	public List<RestauranteModel> listar() {
-		return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
+	public CollectionModel<RestauranteBasicoModel> listar() {
+		return restauranteBasicoModelAssembler.toCollectionModel(restauranteRepository.findAll());
 	}
 
 	@Override
-	@JsonView(RestauranteView.ApenasNome.class)
 	@GetMapping(params = "projecao=apenas-nome")
-	public List<RestauranteModel> listarApenasNomes() {
-		return listar();
+	public CollectionModel<RestauranteApenasNomeModel> listarApenasNomes() {
+		return restauranteApenasNomeModelAssembler.toCollectionModel(restauranteRepository.findAll());
 	}
 
 	@Override
@@ -119,9 +127,10 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 
 	@Override
 	@PutMapping("/{restauranteId}/ativo")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void ativar(@PathVariable Long restauranteId) {
+	public ResponseEntity<Void> ativar(@PathVariable Long restauranteId) {
 		cadastroRestaurante.ativar(restauranteId);
+
+		return ResponseEntity.noContent().build();
 	}
 
 	@Override
@@ -137,23 +146,26 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 
 	@Override
 	@PutMapping("/{restauranteId}/abertura")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void abrir(@PathVariable Long restauranteId) {
+	public ResponseEntity<Void> abrir(@PathVariable Long restauranteId) {
 		cadastroRestaurante.abrir(restauranteId);
+
+		return ResponseEntity.noContent().build();
 	}
 
 	@Override
 	@PutMapping("/{restauranteId}/fechamento")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void fechar(@PathVariable Long restauranteId) {
+	public ResponseEntity<Void> fechar(@PathVariable Long restauranteId) {
 		cadastroRestaurante.fechar(restauranteId);
+
+		return ResponseEntity.noContent().build();
 	}
 
 	@Override
-	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{restauranteId}/ativo")
-	public void inativar(@PathVariable Long restauranteId) {
+	public ResponseEntity<Void> inativar(@PathVariable Long restauranteId) {
 		cadastroRestaurante.inativar(restauranteId);
+
+		return ResponseEntity.noContent().build();
 	}
 
 	@Override

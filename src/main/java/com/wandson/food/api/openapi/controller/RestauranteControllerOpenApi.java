@@ -3,9 +3,12 @@ package com.wandson.food.api.openapi.controller;
 import java.util.List;
 import java.util.Map;
 
-import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import com.wandson.food.api.exceptionhandler.Problem;
+import com.wandson.food.api.model.RestauranteApenasNomeModel;
+import com.wandson.food.api.model.RestauranteBasicoModel;
 import com.wandson.food.api.model.RestauranteModel;
 import com.wandson.food.api.model.input.RestauranteInput;
 import com.wandson.food.api.openapi.model.RestauranteBasicoModelOpenApi;
@@ -20,6 +23,7 @@ import io.swagger.v3.oas.annotations.media.SchemaProperty;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Tag(name = "Restaurantes", description = "Gerencia os restaurantes")
 public interface RestauranteControllerOpenApi {
@@ -27,10 +31,10 @@ public interface RestauranteControllerOpenApi {
 	@Operation(summary = "Lista restaurantes", ignoreJsonView = true)
 	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = RestauranteBasicoModelOpenApi.class)))
 	@Parameter(description = "Nome da projeção de pedidos", name = "projecao", in = ParameterIn.QUERY, schema = @Schema(type = "string", allowableValues = "apenas-nome"))
-	List<RestauranteModel> listar();
+	CollectionModel<RestauranteBasicoModel> listar();
 
 	@Hidden
-	List<RestauranteModel> listarApenasNomes();
+	CollectionModel<RestauranteApenasNomeModel> listarApenasNomes();
 
 	@Operation(summary = "Busca um restaurante por ID")
 	@ApiResponse(responseCode = "200")
@@ -52,12 +56,12 @@ public interface RestauranteControllerOpenApi {
 	@Operation(summary = "Ativa um restaurante por ID")
 	@ApiResponse(responseCode = "204", description = "Restaurante ativado com sucesso")
 	@ApiResponse(responseCode = "404", description = "Restaurante não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
-	void ativar(@Parameter(description = "ID de um restaurante", example = "1") Long restauranteId);
+	ResponseEntity<Void> ativar(@Parameter(description = "ID de um restaurante", example = "1") Long restauranteId);
 
 	@Operation(summary = "Inativa um restaurante por ID")
 	@ApiResponse(responseCode = "204", description = "Restaurante inativado com sucesso")
 	@ApiResponse(responseCode = "404", description = "Restaurante não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
-	void inativar(@Parameter(description = "ID de um restaurante", example = "1") Long restauranteId);
+	ResponseEntity<Void> inativar(@Parameter(description = "ID de um restaurante", example = "1") Long restauranteId);
 
 	@Operation(summary = "Ativa múltiplos restaurantes")
 	@ApiResponse(responseCode = "204", description = "Restaurantes ativados com sucesso")
@@ -70,12 +74,12 @@ public interface RestauranteControllerOpenApi {
 	@Operation(summary = "Abre um restaurante por ID")
 	@ApiResponse(responseCode = "204", description = "Restaurante aberto com sucesso")
 	@ApiResponse(responseCode = "404", description = "Restaurante não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
-	void abrir(@Parameter(description = "ID de um restaurante", example = "1") Long restauranteId);
+	ResponseEntity<Void> abrir(@Parameter(description = "ID de um restaurante", example = "1") Long restauranteId);
 
 	@Operation(summary = "Fecha um restaurante por ID")
 	@ApiResponse(responseCode = "204", description = "Restaurante fechado com sucesso")
 	@ApiResponse(responseCode = "404", description = "Restaurante não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
-	void fechar(@Parameter(description = "ID de um restaurante", example = "1") Long restauranteId);
+	ResponseEntity<Void> fechar(@Parameter(description = "ID de um restaurante", example = "1") Long restauranteId);
 
 	@Operation(summary = "Atualiza parcialmente um restaurante por ID")
 	RestauranteModel atualizarParcial(
