@@ -7,6 +7,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -19,10 +22,6 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -115,8 +114,32 @@ public class Restaurante {
 		return !aceitaFormaPagamento(formaPagamento);
 	}
 
+	public boolean aberturaPermitida() {
+		return getAtivo() && isFechado();
+	}
+
+	public boolean ativacaoPermitida() {
+		return isInativo();
+	}
+
+	public boolean inativacaoPermitida() {
+		return getAtivo();
+	}
+
+	public boolean fechamentoPermitido() {
+		return getAberto();
+	}
+
 	private boolean aceitaFormaPagamento(FormaPagamento formaPagamento) {
 		return formasPagamento.contains(formaPagamento);
+	}
+
+	private boolean isFechado() {
+		return !getAberto();
+	}
+
+	private boolean isInativo() {
+		return !getAtivo();
 	}
 
 }

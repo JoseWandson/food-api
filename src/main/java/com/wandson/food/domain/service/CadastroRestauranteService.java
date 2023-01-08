@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wandson.food.domain.exception.NegocioException;
 import com.wandson.food.domain.exception.RestauranteNaoEncontradoException;
 import com.wandson.food.domain.model.FormaPagamento;
 import com.wandson.food.domain.model.Restaurante;
@@ -52,13 +53,24 @@ public class CadastroRestauranteService {
 	@Transactional
 	public void ativar(Long restauranteId) {
 		Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
-		restauranteAtual.ativar();
+
+		if (restauranteAtual.ativacaoPermitida()) {
+			restauranteAtual.ativar();
+		} else {
+			throw new NegocioException("A ativação não é permitida!");
+		}
+
 	}
 
 	@Transactional
 	public void inativar(Long restauranteId) {
 		Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
-		restauranteAtual.inativar();
+
+		if (restauranteAtual.inativacaoPermitida()) {
+			restauranteAtual.inativar();
+		} else {
+			throw new NegocioException("A inativação não é permitida!");
+		}
 	}
 
 	@Transactional
@@ -90,13 +102,23 @@ public class CadastroRestauranteService {
 	@Transactional
 	public void abrir(Long restauranteId) {
 		Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
-		restauranteAtual.abrir();
+
+		if (restauranteAtual.aberturaPermitida()) {
+			restauranteAtual.abrir();
+		} else {
+			throw new NegocioException("A abertura não é permitida!");
+		}
 	}
 
 	@Transactional
 	public void fechar(Long restauranteId) {
 		Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
-		restauranteAtual.fechar();
+
+		if (restauranteAtual.fechamentoPermitido()) {
+			restauranteAtual.fechar();
+		} else {
+			throw new NegocioException("O fechamento não é permitido!");
+		}
 	}
 
 	@Transactional
