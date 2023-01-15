@@ -1,7 +1,6 @@
 package com.wandson.food.api.openapi.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.ServletWebRequest;
 
@@ -21,7 +20,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface FormaPagamentoControllerOpenApi {
 
 	@Operation(summary = "Lista as formas de pagamento")
-	ResponseEntity<List<FormaPagamentoModel>> listar(ServletWebRequest request);
+	ResponseEntity<CollectionModel<FormaPagamentoModel>> listar(ServletWebRequest request);
 
 	@Operation(summary = "Busca uma forma de pagamento por ID")
 	@ApiResponse(responseCode = "200")

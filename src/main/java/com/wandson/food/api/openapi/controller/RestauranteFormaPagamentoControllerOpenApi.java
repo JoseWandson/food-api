@@ -1,6 +1,6 @@
 package com.wandson.food.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.wandson.food.api.exceptionhandler.Problem;
 import com.wandson.food.api.model.FormaPagamentoModel;
@@ -18,7 +18,8 @@ public interface RestauranteFormaPagamentoControllerOpenApi {
 	@Operation(summary = "Lista as formas de pagamento associadas a restaurante")
 	@ApiResponse(responseCode = "200")
 	@ApiResponse(responseCode = "404", description = "Restaurante não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
-	List<FormaPagamentoModel> listar(@Parameter(description = "ID do restaurante", example = "1") Long restauranteId);
+	CollectionModel<FormaPagamentoModel> listar(
+			@Parameter(description = "ID do restaurante", example = "1") Long restauranteId);
 
 	@Operation(summary = "Desassociação de restaurante com forma de pagamento")
 	@ApiResponse(responseCode = "204", description = "Desassociação realizada com sucesso")
