@@ -84,6 +84,11 @@ public class Links {
 		return linkToRestauranteFormasPagamento(restauranteId, IanaLinkRelations.SELF.value());
 	}
 
+	public Link linkToRestauranteFormaPagamentoDesassociacao(Long restauranteId, Long formaPagamentoId, String rel) {
+		return linkTo(methodOn(RestauranteFormaPagamentoController.class).desassociar(restauranteId, formaPagamentoId))
+				.withRel(rel);
+	}
+
 	public Link linkToRestauranteResponsaveis(Long restauranteId, String rel) {
 		return linkToResponsaveisRestaurante(restauranteId, rel);
 	}
