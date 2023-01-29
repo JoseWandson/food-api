@@ -89,6 +89,10 @@ public class Links {
 				.withRel(rel);
 	}
 
+	public Link linkToRestauranteFormaPagamentoAssociacao(Long restauranteId, String rel) {
+		return linkTo(methodOn(RestauranteFormaPagamentoController.class).associar(restauranteId, null)).withRel(rel);
+	}
+
 	public Link linkToRestauranteResponsaveis(Long restauranteId, String rel) {
 		return linkToResponsaveisRestaurante(restauranteId, rel);
 	}
