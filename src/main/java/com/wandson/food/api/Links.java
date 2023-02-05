@@ -20,6 +20,7 @@ import com.wandson.food.api.controller.PedidoController;
 import com.wandson.food.api.controller.RestauranteController;
 import com.wandson.food.api.controller.RestauranteFormaPagamentoController;
 import com.wandson.food.api.controller.RestauranteProdutoController;
+import com.wandson.food.api.controller.RestauranteProdutoFotoController;
 import com.wandson.food.api.controller.RestauranteUsuarioResponsavelController;
 import com.wandson.food.api.controller.UsuarioController;
 import com.wandson.food.api.controller.UsuarioGrupoController;
@@ -165,6 +166,14 @@ public class Links {
 
 	public Link linkToProdutos(Long restauranteId) {
 		return linkToProdutos(restauranteId, IanaLinkRelations.SELF.value());
+	}
+
+	public Link linkToFotoProduto(Long restauranteId, Long produtoId, String rel) {
+		return linkTo(methodOn(RestauranteProdutoFotoController.class).buscar(restauranteId, produtoId)).withRel(rel);
+	}
+
+	public Link linkToFotoProduto(Long restauranteId, Long produtoId) {
+		return linkToFotoProduto(restauranteId, produtoId, IanaLinkRelations.SELF.value());
 	}
 
 	public Link linkToCozinha(Long cozinhaId) {
