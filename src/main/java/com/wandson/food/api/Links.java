@@ -41,7 +41,7 @@ public class Links {
 				new TemplateVariable("dataCriacaoInicio", VariableType.REQUEST_PARAM),
 				new TemplateVariable("dataCriacaoFim", VariableType.REQUEST_PARAM));
 
-		String pedidosUrl = linkTo(PedidoController.class).toUri().toString();
+		var pedidosUrl = linkTo(PedidoController.class).toUri().toString();
 
 		return Link.of(UriTemplate.of(pedidosUrl, PAGINACAO_VARIABLES.concat(filtroVariables)), rel);
 	}
@@ -55,7 +55,7 @@ public class Links {
 	}
 
 	public Link linkToRestaurantes(String rel) {
-		String restaurantesUrl = linkTo(RestauranteController.class).toUri().toString();
+		var restaurantesUrl = linkTo(RestauranteController.class).toUri().toString();
 
 		return Link.of(UriTemplate.of(restaurantesUrl, PROJECAO_VARIABLES), rel);
 	}
@@ -157,6 +157,14 @@ public class Links {
 
 	public Link linkToProduto(Long restauranteId, Long produtoId, String rel) {
 		return linkTo(methodOn(RestauranteProdutoController.class).buscar(restauranteId, produtoId)).withRel(rel);
+	}
+
+	public Link linkToProdutos(Long restauranteId, String rel) {
+		return linkTo(methodOn(RestauranteProdutoController.class).listar(restauranteId, null)).withRel(rel);
+	}
+
+	public Link linkToProdutos(Long restauranteId) {
+		return linkToProdutos(restauranteId, IanaLinkRelations.SELF.value());
 	}
 
 	public Link linkToCozinha(Long cozinhaId) {

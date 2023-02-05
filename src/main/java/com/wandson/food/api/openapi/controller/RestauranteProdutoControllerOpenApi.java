@@ -1,6 +1,6 @@
 package com.wandson.food.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.wandson.food.api.exceptionhandler.Problem;
 import com.wandson.food.api.model.ProdutoModel;
@@ -21,8 +21,9 @@ public interface RestauranteProdutoControllerOpenApi {
 	@ApiResponse(responseCode = "200")
 	@ApiResponse(responseCode = "400", description = "ID do restaurante inválido", content = @Content(schema = @Schema(implementation = Problem.class)))
 	@ApiResponse(responseCode = "404", description = "Restaurante não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
-	List<ProdutoModel> listar(@Parameter(description = "ID do restaurante", example = "1") Long restauranteId,
-			@Parameter(description = "Indica se deve ou não incluir produtos inativos no resultado da listagem", schema = @Schema(defaultValue = "false", type = "boolean")) boolean incluirInativos);
+	CollectionModel<ProdutoModel> listar(
+			@Parameter(description = "ID do restaurante", example = "1") Long restauranteId,
+			@Parameter(description = "Indica se deve ou não incluir produtos inativos no resultado da listagem", schema = @Schema(defaultValue = "false", type = "boolean")) Boolean incluirInativos);
 
 	@Operation(summary = "Busca um produto de um restaurante")
 	@ApiResponse(responseCode = "200")

@@ -2,9 +2,9 @@ package com.wandson.food.api.controller;
 
 import java.util.List;
 
-import jakarta.validation.Valid;
-
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wandson.food.api.Links;
 import com.wandson.food.api.assembler.ProdutoInputDisassembler;
 import com.wandson.food.api.assembler.ProdutoModelAssembler;
 import com.wandson.food.api.model.ProdutoModel;
@@ -27,6 +28,8 @@ import com.wandson.food.domain.model.Restaurante;
 import com.wandson.food.domain.repository.ProdutoRepository;
 import com.wandson.food.domain.service.CadastroProdutoService;
 import com.wandson.food.domain.service.CadastroRestauranteService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/restaurantes/{restauranteId}/produtos", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -47,20 +50,23 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 	@Autowired
 	private ProdutoInputDisassembler produtoInputDisassembler;
 
+	@Autowired
+	private Links links;
+
 	@Override
 	@GetMapping
-	public List<ProdutoModel> listar(@PathVariable Long restauranteId,
-			@RequestParam(required = false) boolean incluirInativos) {
+	public CollectionModel<ProdutoModel> listar(@PathVariable Long restauranteId,
+			@RequestParam(required = false) Boolean incluirInativos) {
 		Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
 		List<Produto> todosProdutos;
-		if (incluirInativos) {
+		if (BooleanUtils.isTrue(incluirInativos)) {
 			todosProdutos = produtoRepository.findTodosByRestaurante(restaurante);
 		} else {
 			todosProdutos = produtoRepository.findAtivosByRestaurante(restaurante);
 		}
 
-		return produtoModelAssembler.toCollectionModel(todosProdutos);
+		return produtoModelAssembler.toCollectionModel(todosProdutos).add(links.linkToProdutos(restauranteId));
 	}
 
 	@Override

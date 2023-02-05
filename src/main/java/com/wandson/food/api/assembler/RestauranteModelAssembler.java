@@ -51,6 +51,8 @@ public class RestauranteModelAssembler extends RepresentationModelAssemblerSuppo
 			restauranteModel.add(links.linkToRestauranteFechamento(restaurante.getId(), "fechar"));
 		}
 
+		restauranteModel.add(links.linkToProdutos(restaurante.getId(), "produtos"));
+
 		restauranteModel.getCozinha().add(links.linkToCozinha(restaurante.getCozinha().getId()));
 
 		if (Objects.nonNull(restauranteModel.getEndereco())) {
