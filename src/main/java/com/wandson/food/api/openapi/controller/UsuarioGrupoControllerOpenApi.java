@@ -1,6 +1,6 @@
 package com.wandson.food.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.wandson.food.api.exceptionhandler.Problem;
 import com.wandson.food.api.model.GrupoModel;
@@ -18,7 +18,7 @@ public interface UsuarioGrupoControllerOpenApi {
 	@Operation(summary = "Lista os grupos associados a um usuário")
 	@ApiResponse(responseCode = "200")
 	@ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
-	List<GrupoModel> listar(@Parameter(description = "ID do usuário", example = "1") Long usuarioId);
+	CollectionModel<GrupoModel> listar(@Parameter(description = "ID do usuário", example = "1") Long usuarioId);
 
 	@Operation(summary = "Desassociação de grupo com usuário")
 	@ApiResponse(responseCode = "204", description = "Desassociação realizada com sucesso")

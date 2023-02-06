@@ -2,9 +2,8 @@ package com.wandson.food.api.controller;
 
 import java.util.List;
 
-import jakarta.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,6 +25,8 @@ import com.wandson.food.domain.model.Grupo;
 import com.wandson.food.domain.repository.GrupoRepository;
 import com.wandson.food.domain.service.CadastroGrupoService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(path = "/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GrupoController implements GrupoControllerOpenApi {
@@ -44,7 +45,7 @@ public class GrupoController implements GrupoControllerOpenApi {
 
 	@Override
 	@GetMapping
-	public List<GrupoModel> listar() {
+	public CollectionModel<GrupoModel> listar() {
 		List<Grupo> todosGrupos = grupoRepository.findAll();
 
 		return grupoModelAssembler.toCollectionModel(todosGrupos);

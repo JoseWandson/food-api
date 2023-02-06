@@ -16,6 +16,8 @@ import com.wandson.food.api.controller.CozinhaController;
 import com.wandson.food.api.controller.EstadoController;
 import com.wandson.food.api.controller.FluxoPedidoController;
 import com.wandson.food.api.controller.FormaPagamentoController;
+import com.wandson.food.api.controller.GrupoController;
+import com.wandson.food.api.controller.GrupoPermissaoController;
 import com.wandson.food.api.controller.PedidoController;
 import com.wandson.food.api.controller.RestauranteController;
 import com.wandson.food.api.controller.RestauranteFormaPagamentoController;
@@ -108,6 +110,18 @@ public class Links {
 
 	public Link linkToGruposUsuario(Long usuarioId, String rel) {
 		return linkTo(methodOn(UsuarioGrupoController.class).listar(usuarioId)).withRel(rel);
+	}
+
+	public Link linkToGrupos(String rel) {
+		return linkTo(GrupoController.class).withRel(rel);
+	}
+
+	public Link linkToGrupos() {
+		return linkToGrupos(IanaLinkRelations.SELF.value());
+	}
+
+	public Link linkToGrupoPermissoes(Long grupoId, String rel) {
+		return linkTo(methodOn(GrupoPermissaoController.class).listar(grupoId)).withRel(rel);
 	}
 
 	public Link linkToRestauranteResponsaveis(Long restauranteId, String rel) {
