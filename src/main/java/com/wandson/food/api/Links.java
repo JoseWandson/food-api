@@ -19,6 +19,7 @@ import com.wandson.food.api.controller.FormaPagamentoController;
 import com.wandson.food.api.controller.GrupoController;
 import com.wandson.food.api.controller.GrupoPermissaoController;
 import com.wandson.food.api.controller.PedidoController;
+import com.wandson.food.api.controller.PermissaoController;
 import com.wandson.food.api.controller.RestauranteController;
 import com.wandson.food.api.controller.RestauranteFormaPagamentoController;
 import com.wandson.food.api.controller.RestauranteProdutoController;
@@ -122,6 +123,22 @@ public class Links {
 
 	public Link linkToGrupoPermissoes(Long grupoId, String rel) {
 		return linkTo(methodOn(GrupoPermissaoController.class).listar(grupoId)).withRel(rel);
+	}
+
+	public Link linkToGrupoPermissoes(Long grupoId) {
+		return linkToGrupoPermissoes(grupoId, IanaLinkRelations.SELF.value());
+	}
+
+	public Link linkToGrupoPermissaoAssociacao(Long grupoId, String rel) {
+		return linkTo(methodOn(GrupoPermissaoController.class).associar(grupoId, null)).withRel(rel);
+	}
+
+	public Link linkToGrupoPermissaoDesassociacao(Long grupoId, Long permissaoId, String rel) {
+		return linkTo(methodOn(GrupoPermissaoController.class).desassociar(grupoId, permissaoId)).withRel(rel);
+	}
+
+	public Link linkToPermissoes() {
+		return linkToPermissoes(IanaLinkRelations.SELF.value());
 	}
 
 	public Link linkToRestauranteResponsaveis(Long restauranteId, String rel) {
@@ -240,6 +257,10 @@ public class Links {
 
 	private Link linkToCozinha(Long cozinhaId, String rel) {
 		return linkTo(methodOn(CozinhaController.class).buscar(cozinhaId)).withRel(rel);
+	}
+
+	private Link linkToPermissoes(String rel) {
+		return linkTo(PermissaoController.class).withRel(rel);
 	}
 
 }
