@@ -145,6 +145,10 @@ public class Links {
 		return linkTo(methodOn(GrupoPermissaoController.class).desassociar(grupoId, permissaoId)).withRel(rel);
 	}
 
+	public Link linkToPermissoes(String rel) {
+		return linkTo(PermissaoController.class).withRel(rel);
+	}
+
 	public Link linkToPermissoes() {
 		return linkToPermissoes(IanaLinkRelations.SELF.value());
 	}
@@ -265,10 +269,6 @@ public class Links {
 
 	private Link linkToCozinha(Long cozinhaId, String rel) {
 		return linkTo(methodOn(CozinhaController.class).buscar(cozinhaId)).withRel(rel);
-	}
-
-	private Link linkToPermissoes(String rel) {
-		return linkTo(PermissaoController.class).withRel(rel);
 	}
 
 }
