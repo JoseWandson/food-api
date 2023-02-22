@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wandson.food.api.Links;
 import com.wandson.food.api.openapi.controller.EstatisticasControllerOpenApi;
 import com.wandson.food.domain.filter.VendaDiariaFilter;
 import com.wandson.food.domain.model.dto.VendaDiaria;
@@ -26,6 +27,19 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
 
 	@Autowired
 	private VendaReportService vendaReportService;
+
+	@Autowired
+	private Links links;
+
+	@Override
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public EstatisticasModel estatisticas() {
+		var estatisticasModel = new EstatisticasModel();
+
+		estatisticasModel.add(links.linkToEstatisticasVendasDiarias("vendas-diarias"));
+
+		return estatisticasModel;
+	}
 
 	@Override
 	@GetMapping(path = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)

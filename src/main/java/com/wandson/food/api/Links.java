@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.wandson.food.api.controller.CidadeController;
 import com.wandson.food.api.controller.CozinhaController;
 import com.wandson.food.api.controller.EstadoController;
+import com.wandson.food.api.controller.EstatisticasController;
 import com.wandson.food.api.controller.FluxoPedidoController;
 import com.wandson.food.api.controller.FormaPagamentoController;
 import com.wandson.food.api.controller.GrupoController;
@@ -245,6 +246,22 @@ public class Links {
 
 	public Link linkToFormasPagamento() {
 		return linkToFormasPagamento(IanaLinkRelations.SELF.value());
+	}
+
+	public Link linkToEstatisticas(String rel) {
+		return linkTo(EstatisticasController.class).withRel(rel);
+	}
+
+	public Link linkToEstatisticasVendasDiarias(String rel) {
+		var filtroVariables = new TemplateVariables(new TemplateVariable("restauranteId", VariableType.REQUEST_PARAM),
+				new TemplateVariable("dataCriacaoInicio", VariableType.REQUEST_PARAM),
+				new TemplateVariable("dataCriacaoFim", VariableType.REQUEST_PARAM),
+				new TemplateVariable("timeOffset", VariableType.REQUEST_PARAM));
+
+		var pedidosUrl = linkTo(methodOn(EstatisticasController.class).consultarVendasDiarias(null, null)).toUri()
+				.toString();
+
+		return Link.of(UriTemplate.of(pedidosUrl, filtroVariables), rel);
 	}
 
 	private Link linkToRestaurante(Long restauranteId, String rel) {

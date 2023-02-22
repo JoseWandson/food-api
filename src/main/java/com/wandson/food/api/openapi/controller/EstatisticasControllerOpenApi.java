@@ -2,6 +2,7 @@ package com.wandson.food.api.openapi.controller;
 
 import java.util.List;
 
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.ResponseEntity;
 
 import com.wandson.food.domain.filter.VendaDiariaFilter;
@@ -19,6 +20,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Estatísticas", description = "Estatísticas da JWFood")
 public interface EstatisticasControllerOpenApi {
 
+	@Operation(summary = "Estatísticas", hidden = true)
+	EstatisticasModel estatisticas();
+
 	@Operation(summary = "Consulta estatísticas de vendas diárias")
 	@ApiResponse(responseCode = "200", content = { @Content(mediaType = "application/json"),
 			@Content(mediaType = "application/pdf") })
@@ -30,4 +34,7 @@ public interface EstatisticasControllerOpenApi {
 
 	@Hidden
 	ResponseEntity<byte[]> consultarVendasDiariasPdf(VendaDiariaFilter filtro, String timeOffset);
+
+	static class EstatisticasModel extends RepresentationModel<EstatisticasModel> {
+	}
 }
