@@ -16,12 +16,12 @@ public class WebConfig implements WebMvcConfigurer {
 		registry.addMapping("/**").allowedMethods("*");
 	}
 
-	@Bean
-	public Filter shallowEtagHeaderFilter() {
-		var shallowEtagHeaderFilter = new ShallowEtagHeaderFilter();
-		shallowEtagHeaderFilter.setWriteWeakETag(true);
+    @Bean
+    Filter shallowEtagHeaderFilter() {
+        var shallowEtagHeaderFilter = new ShallowEtagHeaderFilter();
+        shallowEtagHeaderFilter.setWriteWeakETag(true);
 
-		return shallowEtagHeaderFilter;
-	}
+        return shallowEtagHeaderFilter;
+    }
 
 }

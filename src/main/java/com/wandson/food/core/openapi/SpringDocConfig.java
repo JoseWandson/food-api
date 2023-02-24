@@ -2,14 +2,16 @@ package com.wandson.food.core.openapi;
 
 import java.util.Objects;
 
-import org.springdoc.core.SpringDocUtils;
-import org.springdoc.core.customizers.OpenApiCustomiser;
+import org.springdoc.core.customizers.OpenApiCustomizer;
+import org.springdoc.core.utils.SpringDocUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.Links;
 import org.springframework.http.HttpStatus;
 
 import com.wandson.food.api.exceptionhandler.Problem;
+import com.wandson.food.api.openapi.model.LinksModelOpenApi;
 import com.wandson.food.api.openapi.model.PageableModelOpenApi;
 
 import io.swagger.v3.core.converter.AnnotatedType;
@@ -28,7 +30,7 @@ import io.swagger.v3.oas.models.responses.ApiResponses;
 public class SpringDocConfig {
 
 	@Bean
-	public OpenAPI openAPI() {
+	OpenAPI openAPI() {
 		return new OpenAPI().info(
 				new Info().title("WandFood Api").description("API aberta para clientes e restaurantes").version("1")
 						.contact(new Contact().name("Wandson")
@@ -37,8 +39,9 @@ public class SpringDocConfig {
 	}
 
 	@Bean
-	public OpenApiCustomiser openApiCustomiser() {
-		SpringDocUtils.getConfig().replaceWithClass(Pageable.class, PageableModelOpenApi.class);
+	OpenApiCustomizer openApiCustomizer() {
+		SpringDocUtils.getConfig().replaceWithClass(Pageable.class, PageableModelOpenApi.class)
+				.replaceWithClass(Links.class, LinksModelOpenApi.class);
 
 		return openApi -> openApi.getPaths().values().forEach(pathItem -> {
 			Operation operationGet = pathItem.getGet();

@@ -11,12 +11,12 @@ import com.wandson.food.infrastructure.service.email.SmtpEnvioEmailService;
 @Configuration
 public class EmailConfig {
 
-	@Bean
-	public EnvioEmailService envioEmailService(EmailProperties emailProperties) {
-		return switch (emailProperties.getImpl()) {
-		case FAKE -> new FakeEnvioEmailService();
-		case SMTP -> new SmtpEnvioEmailService();
-		case SANDBOX -> new SandboxEnvioEmailService();
-		};
-	}
+    @Bean
+    EnvioEmailService envioEmailService(EmailProperties emailProperties) {
+        return switch (emailProperties.getImpl()) {
+            case FAKE -> new FakeEnvioEmailService();
+            case SMTP -> new SmtpEnvioEmailService();
+            case SANDBOX -> new SandboxEnvioEmailService();
+        };
+    }
 }
