@@ -6,7 +6,6 @@ import org.springframework.hateoas.PagedModel;
 import com.wandson.food.api.exceptionhandler.Problem;
 import com.wandson.food.api.model.CozinhaModel;
 import com.wandson.food.api.model.input.CozinhaInput;
-import com.wandson.food.api.openapi.model.CozinhasModelOpenApi;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,7 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface CozinhaControllerOpenApi {
 
 	@Operation(summary = "Lista as cozinhas com paginação")
-	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = CozinhasModelOpenApi.class)))
+	@ApiResponse(responseCode = "200")
 	PagedModel<CozinhaModel> listar(Pageable pageable);
 
 	@Operation(summary = "Busca uma cozinha por ID")
