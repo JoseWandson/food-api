@@ -19,7 +19,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface CozinhaControllerOpenApi {
 
 	@Operation(summary = "Lista as cozinhas com paginação")
-	@ApiResponse(responseCode = "200")
 	PagedModel<CozinhaModel> listar(Pageable pageable);
 
 	@Operation(summary = "Busca uma cozinha por ID")
