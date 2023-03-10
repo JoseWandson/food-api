@@ -11,7 +11,6 @@ import com.wandson.food.api.model.RestauranteApenasNomeModel;
 import com.wandson.food.api.model.RestauranteBasicoModel;
 import com.wandson.food.api.model.RestauranteModel;
 import com.wandson.food.api.model.input.RestauranteInput;
-import com.wandson.food.api.openapi.model.RestauranteBasicoModelOpenApi;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,7 +28,6 @@ import jakarta.servlet.http.HttpServletRequest;
 public interface RestauranteControllerOpenApi {
 
 	@Operation(summary = "Lista restaurantes", ignoreJsonView = true)
-	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = RestauranteBasicoModelOpenApi.class)))
 	@Parameter(description = "Nome da projeção de pedidos", name = "projecao", in = ParameterIn.QUERY, schema = @Schema(type = "string", allowableValues = "apenas-nome"))
 	CollectionModel<RestauranteBasicoModel> listar();
 
