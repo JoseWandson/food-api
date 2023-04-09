@@ -11,8 +11,8 @@ import org.springframework.hateoas.Links;
 import org.springframework.http.HttpStatus;
 
 import com.wandson.food.api.exceptionhandler.Problem;
-import com.wandson.food.api.openapi.model.LinksModelOpenApi;
-import com.wandson.food.api.openapi.model.PageableModelOpenApi;
+import com.wandson.food.api.v1.openapi.model.LinksModelOpenApi;
+import com.wandson.food.api.v1.openapi.model.PageableModelOpenApi;
 
 import io.swagger.v3.core.converter.AnnotatedType;
 import io.swagger.v3.core.converter.ModelConverters;

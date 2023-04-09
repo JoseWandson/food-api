@@ -1,0 +1,58 @@
+package com.wandson.food.api.v1.assembler;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
+import org.springframework.stereotype.Component;
+
+import com.wandson.food.api.v1.Links;
+import com.wandson.food.api.v1.controller.PedidoController;
+import com.wandson.food.api.v1.model.PedidoModel;
+import com.wandson.food.domain.model.Pedido;
+
+@Component
+public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pedido, PedidoModel> {
+
+	@Autowired
+	private ModelMapper modelMapper;
+
+	@Autowired
+	private Links links;
+
+	public PedidoModelAssembler() {
+		super(PedidoController.class, PedidoModel.class);
+	}
+
+	@Override
+	public PedidoModel toModel(Pedido pedido) {
+		PedidoModel pedidoModel = createModelWithId(pedido.getCodigo(), pedido);
+		modelMapper.map(pedido, pedidoModel);
+
+		pedidoModel.add(links.linkToPedidos("pedidos"));
+
+		if (pedido.podeSerConfirmado()) {
+			pedidoModel.add(links.linkToConfirmacaoPedido(pedido.getCodigo(), "confirmar"));
+		}
+		if (pedido.podeSerCancelado()) {
+			pedidoModel.add(links.linkToCancelamentoPedido(pedido.getCodigo(), "cancelar"));
+		}
+		if (pedido.podeSerEntregue()) {
+			pedidoModel.add(links.linkToEntregaPedido(pedido.getCodigo(), "entregar"));
+		}
+
+		pedidoModel.getRestaurante().add(links.linkToRestaurante(pedido.getRestaurante().getId()));
+
+		pedidoModel.getCliente().add(links.linkToUsuario(pedido.getCliente().getId()));
+
+		pedidoModel.getFormaPagamento().add(links.linkToFormaPagamento(pedido.getFormaPagamento().getId()));
+
+		pedidoModel.getEnderecoEntrega().getCidade()
+				.add(links.linkToCidade(pedido.getEnderecoEntrega().getCidade().getId()));
+
+		pedidoModel.getItens().forEach(
+				i -> i.add(links.linkToProduto(pedidoModel.getRestaurante().getId(), i.getProdutoId(), "produto")));
+
+		return pedidoModel;
+	}
+
+}
