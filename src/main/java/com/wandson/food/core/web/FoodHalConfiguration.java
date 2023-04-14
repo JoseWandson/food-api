@@ -11,7 +11,7 @@ public class FoodHalConfiguration {
 	@Bean
 	HalConfiguration globalPolicy() {
 		return new HalConfiguration().withMediaType(MediaType.APPLICATION_JSON)
-				.withMediaType(FoodMediaTypes.V1_APPLICATION_JSON);
+				.withMediaType(FoodMediaTypes.V1_APPLICATION_JSON).withMediaType(FoodMediaTypes.V2_APPLICATION_JSON);
 	}
 
 }

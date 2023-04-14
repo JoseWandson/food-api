@@ -1,8 +1,8 @@
 package com.wandson.food.api.v1.model.input;
 
-import jakarta.validation.constraints.NotNull;
-
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +11,7 @@ import lombok.Setter;
 public class FormaPagamentoIdInput {
 
 	@NotNull
-	@Schema(example = "1", required = true)
+	@Schema(example = "1", requiredMode = RequiredMode.REQUIRED)
 	private Long id;
 
 }

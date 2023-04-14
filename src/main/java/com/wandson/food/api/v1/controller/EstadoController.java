@@ -2,8 +2,6 @@ package com.wandson.food.api.v1.controller;
 
 import java.util.List;
 
-import jakarta.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -26,6 +24,8 @@ import com.wandson.food.api.v1.openapi.controller.EstadoControllerOpenApi;
 import com.wandson.food.domain.model.Estado;
 import com.wandson.food.domain.repository.EstadoRepository;
 import com.wandson.food.domain.service.CadastroEstadoService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/estados", produces = MediaType.APPLICATION_JSON_VALUE)
