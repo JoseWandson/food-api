@@ -32,7 +32,7 @@ import com.wandson.food.domain.service.CadastroRestauranteService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(path = "/restaurantes/{restauranteId}/produtos", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/restaurantes/{restauranteId}/produtos", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestauranteProdutoController implements RestauranteProdutoControllerOpenApi {
 
 	@Autowired

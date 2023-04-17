@@ -28,7 +28,7 @@ import com.wandson.food.domain.service.CadastroEstadoService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(path = "/estados", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/estados", produces = MediaType.APPLICATION_JSON_VALUE)
 public class EstadoController implements EstadoControllerOpenApi {
 
 	@Autowired

@@ -19,7 +19,7 @@ import com.wandson.food.domain.service.VendaQueryService;
 import com.wandson.food.domain.service.VendaReportService;
 
 @RestController
-@RequestMapping("/estatisticas")
+@RequestMapping("/v1/estatisticas")
 public class EstatisticasController implements EstatisticasControllerOpenApi {
 
 	@Autowired

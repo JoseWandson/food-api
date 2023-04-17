@@ -16,7 +16,7 @@ import com.wandson.food.domain.model.Permissao;
 import com.wandson.food.domain.repository.PermissaoRepository;
 
 @RestController
-@RequestMapping(path = "/permissoes", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/permissoes", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PermissaoController implements PermissaoControllerOpenApi {
 
 	@Autowired
