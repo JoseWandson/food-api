@@ -3,6 +3,7 @@ package com.wandson.food.core.openapi;
 import java.util.Objects;
 
 import org.springdoc.core.customizers.OpenApiCustomizer;
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springdoc.core.utils.SpringDocUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +17,6 @@ import com.wandson.food.api.v1.openapi.model.PageableModelOpenApi;
 
 import io.swagger.v3.core.converter.AnnotatedType;
 import io.swagger.v3.core.converter.ModelConverters;
-import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
@@ -29,21 +29,25 @@ import io.swagger.v3.oas.models.responses.ApiResponses;
 @Configuration
 public class SpringDocConfig {
 
-	@Bean
-	OpenAPI openAPI() {
-		return new OpenAPI().info(
-				new Info().title("WandFood Api").description("API aberta para clientes e restaurantes").version("1")
-						.contact(new Contact().name("Wandson")
-								.url("https://www.linkedin.com/in/wandson-cavalcante-b8428b139/")
-								.email("wandsonacop@hotmail.com")));
+	static {
+		SpringDocUtils.getConfig().replaceWithClass(Pageable.class, PageableModelOpenApi.class)
+				.replaceWithClass(Links.class, LinksModelOpenApi.class);
 	}
 
 	@Bean
-	OpenApiCustomizer openApiCustomizer() {
-		SpringDocUtils.getConfig().replaceWithClass(Pageable.class, PageableModelOpenApi.class)
-				.replaceWithClass(Links.class, LinksModelOpenApi.class);
+	GroupedOpenApi groupedOpenApiV1() {
+		return GroupedOpenApi.builder().group("V1").pathsToMatch("/v1/**").addOpenApiCustomizer(openApiCustomizer("1"))
+				.build();
+	}
 
-		return openApi -> openApi.getPaths().values().forEach(pathItem -> {
+	@Bean
+	GroupedOpenApi groupedOpenApiV2() {
+		return GroupedOpenApi.builder().group("V2").pathsToMatch("/v2/**").addOpenApiCustomizer(openApiCustomizer("2"))
+				.build();
+	}
+
+	private OpenApiCustomizer openApiCustomizer(String version) {
+		return openApi -> openApi.info(info(version)).getPaths().values().forEach(pathItem -> {
 			Operation operationGet = pathItem.getGet();
 			if (Objects.nonNull(operationGet)) {
 				ApiResponses apiResponses = operationGet.getResponses();
@@ -111,6 +115,12 @@ public class SpringDocConfig {
 
 		return new ApiResponse().description(description).content(new Content().addMediaType(
 				org.springframework.http.MediaType.APPLICATION_JSON_VALUE, new MediaType().schema(schema)));
+	}
+
+	private Info info(String version) {
+		return new Info().title("WandFood Api").description("API aberta para clientes e restaurantes").version(version)
+				.contact(new Contact().name("Wandson").url("https://www.linkedin.com/in/wandson-cavalcante-b8428b139/")
+						.email("wandsonacop@hotmail.com"));
 	}
 
 }
