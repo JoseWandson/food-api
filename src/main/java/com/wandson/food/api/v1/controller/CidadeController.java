@@ -22,6 +22,7 @@ import com.wandson.food.api.v1.assembler.CidadeModelAssembler;
 import com.wandson.food.api.v1.model.CidadeModel;
 import com.wandson.food.api.v1.model.input.CidadeInput;
 import com.wandson.food.api.v1.openapi.controller.CidadeControllerOpenApi;
+import com.wandson.food.api.v2.controller.CidadeControllerV2;
 import com.wandson.food.domain.exception.EstadoNaoEncontradoException;
 import com.wandson.food.domain.exception.NegocioException;
 import com.wandson.food.domain.model.Cidade;
@@ -30,7 +31,11 @@ import com.wandson.food.domain.service.CadastroCidadeService;
 
 import jakarta.validation.Valid;
 
+/**
+ * @deprecated Use {@link CidadeControllerV2} instead.
+ */
 @RestController
+@Deprecated(since = "1", forRemoval = true)
 @RequestMapping(path = "/v1/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CidadeController implements CidadeControllerOpenApi {
 
