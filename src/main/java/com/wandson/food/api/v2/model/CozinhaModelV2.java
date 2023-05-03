@@ -10,6 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@Schema(name = "CozinhaModel")
 @Relation(collectionRelation = "cozinhas")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class CozinhaModelV2 extends RepresentationModel<CozinhaModelV2> {

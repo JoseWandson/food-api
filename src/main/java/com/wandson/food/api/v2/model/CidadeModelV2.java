@@ -10,6 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@Schema(name = "CidadeModel")
 @Relation(collectionRelation = "cidades")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class CidadeModelV2 extends RepresentationModel<CidadeModelV2> {

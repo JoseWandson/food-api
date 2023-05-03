@@ -22,6 +22,7 @@ import com.wandson.food.api.v2.assembler.CozinhaInputDisassemblerV2;
 import com.wandson.food.api.v2.assembler.CozinhaModelAssemblerV2;
 import com.wandson.food.api.v2.model.CozinhaModelV2;
 import com.wandson.food.api.v2.model.input.CozinhaInputV2;
+import com.wandson.food.api.v2.openapi.controller.CozinhaControllerV2OpenApi;
 import com.wandson.food.domain.model.Cozinha;
 import com.wandson.food.domain.repository.CozinhaRepository;
 import com.wandson.food.domain.service.CadastroCozinhaService;
@@ -30,7 +31,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/v2/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CozinhaControllerV2 {
+public class CozinhaControllerV2 implements CozinhaControllerV2OpenApi {
 
 	@Autowired
 	private CadastroCozinhaService cadastroCozinha;
@@ -47,6 +48,7 @@ public class CozinhaControllerV2 {
 	@Autowired
 	private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
 
+	@Override
 	@GetMapping
 	public PagedModel<CozinhaModelV2> listar(@PageableDefault Pageable pageable) {
 		Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
@@ -54,12 +56,14 @@ public class CozinhaControllerV2 {
 		return pagedResourcesAssembler.toModel(cozinhasPage, cozinhaModelAssembler);
 	}
 
+	@Override
 	@GetMapping("/{cozinhaId}")
 	public CozinhaModelV2 buscar(@PathVariable Long cozinhaId) {
 		Cozinha cozinha = cadastroCozinha.buscarOuFalhar(cozinhaId);
 		return cozinhaModelAssembler.toModel(cozinha);
 	}
 
+	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public CozinhaModelV2 adicionar(@RequestBody @Valid CozinhaInputV2 cozinhaInput) {
@@ -68,6 +72,7 @@ public class CozinhaControllerV2 {
 		return cozinhaModelAssembler.toModel(cozinha);
 	}
 
+	@Override
 	@PutMapping("/{cozinhaId}")
 	public CozinhaModelV2 atualizar(@PathVariable Long cozinhaId, @RequestBody @Valid CozinhaInputV2 cozinhaInput) {
 		Cozinha cozinhaAtual = cadastroCozinha.buscarOuFalhar(cozinhaId);
@@ -78,6 +83,7 @@ public class CozinhaControllerV2 {
 		return cozinhaModelAssembler.toModel(cozinhaAtual);
 	}
 
+	@Override
 	@DeleteMapping("/{cozinhaId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long cozinhaId) {

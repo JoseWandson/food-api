@@ -9,6 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@Schema(name = "CidadeInput")
 public class CidadeInputV2 {
 
 	@NotBlank

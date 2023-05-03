@@ -8,6 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@Schema(name = "CozinhaInput")
 public class CozinhaInputV2 {
 
 	@NotBlank
