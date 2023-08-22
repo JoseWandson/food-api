@@ -40,12 +40,6 @@ public class SpringDocConfig {
 				.build();
 	}
 
-	@Bean
-	GroupedOpenApi groupedOpenApiV2() {
-		return GroupedOpenApi.builder().group("V2").pathsToMatch("/v2/**").addOpenApiCustomizer(openApiCustomizer("2"))
-				.build();
-	}
-
 	private OpenApiCustomizer openApiCustomizer(String version) {
 		return openApi -> openApi.info(info(version)).getPaths().values().forEach(pathItem -> {
 			Operation operationGet = pathItem.getGet();
