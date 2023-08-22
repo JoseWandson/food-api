@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.1</version>
+		<version>3.1.2</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -21,8 +21,8 @@
 		<java.version>17</java.version>
 		<modelmapper.version>3.1.1</modelmapper.version>
 		<jasperreports.version>6.20.5</jasperreports.version>
-		<aws-java-sdk-s3.version>1.12.500</aws-java-sdk-s3.version>
-		<springdoc.version>2.1.0</springdoc.version>
+		<aws-java-sdk-s3.version>1.12.533</aws-java-sdk-s3.version>
+		<springdoc.version>2.2.0</springdoc.version>
 		<logback-ext-loggly.version>0.1.5</logback-ext-loggly.version>
 	</properties>
 
@@ -80,6 +80,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-hateoas</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
 		<dependency>
