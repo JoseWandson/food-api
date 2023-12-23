@@ -3,23 +3,23 @@ package com.wandson.food.infrastructure.service.report;
 import java.util.HashMap;
 import java.util.Locale;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wandson.food.domain.filter.VendaDiariaFilter;
 import com.wandson.food.domain.service.VendaQueryService;
 import com.wandson.food.domain.service.VendaReportService;
 
+import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Service
+@RequiredArgsConstructor
 public class PdfVendaReportService implements VendaReportService {
 
-	@Autowired
-	private VendaQueryService vendaQueryService;
+	private final VendaQueryService vendaQueryService;
 
 	@Override
 	public byte[] emitirVendasDiarias(VendaDiariaFilter filtro, String timeOffset) {
@@ -27,7 +27,7 @@ public class PdfVendaReportService implements VendaReportService {
 			var inputStream = getClass().getResourceAsStream("/relatorios/vendas-diarias.jasper");
 
 			var parametros = new HashMap<String, Object>();
-			parametros.put("REPORT_LOCALE", new Locale("pt", "BR"));
+			parametros.put("REPORT_LOCALE", Locale.of("pt", "BR"));
 
 			var vendasDiarias = vendaQueryService.consultarVendasDiarias(filtro, timeOffset);
 			var dataSource = new JRBeanCollectionDataSource(vendasDiarias);

@@ -2,7 +2,6 @@ package com.wandson.food.api.v1.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,22 +28,20 @@ import com.wandson.food.domain.repository.CidadeRepository;
 import com.wandson.food.domain.service.CadastroCidadeService;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(path = "/v1/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CidadeController implements CidadeControllerOpenApi {
 
-	@Autowired
-	private CadastroCidadeService cadastroCidade;
+	private final CadastroCidadeService cadastroCidade;
 
-	@Autowired
-	private CidadeRepository cidadeRepository;
+	private final CidadeRepository cidadeRepository;
 
-	@Autowired
-	private CidadeModelAssembler cidadeModelAssembler;
+	private final CidadeModelAssembler cidadeModelAssembler;
 
-	@Autowired
-	private CidadeInputDisassembler cidadeInputDisassembler;
+	private final CidadeInputDisassembler cidadeInputDisassembler;
 
 	@Override
 	@GetMapping
